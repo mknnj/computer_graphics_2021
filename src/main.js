@@ -45,27 +45,27 @@ async function main() {
   const faceInfos = [
     {
       target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-      url: '/assets/skybox/right.jpg',
+      url: './../assets/skybox/right.jpg',
     },
     {
       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-      url: '/assets/skybox/left.jpg',
+      url: './../assets/skybox/left.jpg',
     },
     {
       target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-      url: '/assets/skybox/up.jpg',
+      url: './../assets/skybox/up.jpg',
     },
     {
       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-      url: '/assets/skybox/down.jpg',
+      url: './../assets/skybox/down.jpg',
     },
     {
       target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-      url: '/assets/skybox/front.jpg',
+      url: './../assets/skybox/front.jpg',
     },
     {
       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-      url: '/assets/skybox/back.jpg',
+      url: './../assets/skybox/back.jpg',
     },
   ];
   faceInfos.forEach((faceInfo) => {
