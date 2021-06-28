@@ -1,7 +1,11 @@
 import {utils} from "./utils.js";
+import {Camera} from "./Camera.js";
+
+var camera;
+var canvas;
 
 async function main() {
-  var canvas = document.querySelector("#my-canvas");
+  canvas = document.querySelector("#my-canvas");
   var gl = canvas.getContext("webgl2");
   if (!gl) {
     return;
@@ -103,6 +107,11 @@ async function main() {
     return d * Math.PI / 180;
   }
 
+  camera = new Camera();
+  canvas.addEventListener("mousemove", updateCamera, false);
+  canvas.addEventListener("mousedown", lockChange, false);
+  
+
   var cameraYRotationRadians = degToRad(0);
 
   var spinCamera = true;
@@ -155,19 +164,20 @@ async function main() {
       utils.MakePerspective(30, aspect, 1, 2000);
 
     // camera going in circle 2 units from origin looking at origin
-    var cameraPosition = [Math.cos(time * .1), 0, Math.sin(time * .1)];
+    /*var cameraPosition = [Math.cos(time * .1), 0, Math.sin(time * .1)];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
     // Compute the camera's matrix using look at.
     var cameraMatrix = utils.LookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = utils.invertMatrix(cameraMatrix);
+    var viewMatrix = utils.invertMatrix(cameraMatrix);*/
+    var viewMatrix = camera.getViewMatrix();
 
     // We only care about direciton so remove the translation
-    viewMatrix[12] = 0;
+    /*viewMatrix[12] = 0;
     viewMatrix[13] = 0;
-    viewMatrix[14] = 0;
+    viewMatrix[14] = 0;*/
 
     var viewDirectionProjectionMatrix =
       utils.multiplyMatrices(projectionMatrix, viewMatrix);
@@ -204,6 +214,14 @@ function setGeometry(gl) {
        1,  1,
     ]);
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+}
+
+function updateCamera(e){
+  if (document.pointerLockElement == canvas) camera.mouseMove(e);
+}
+
+function lockChange(){
+  if (document.pointerLockElement != canvas) canvas.requestPointerLock();
 }
 
 addEventListener("load", () => {
