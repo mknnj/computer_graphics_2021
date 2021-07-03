@@ -108,8 +108,6 @@ async function main() {
   }
 
   camera = new Camera();
-  canvas.addEventListener("mousemove", updateCamera, false);
-  canvas.addEventListener("mousedown", lockChange, false);
   
 
   var cameraYRotationRadians = degToRad(0);
@@ -216,14 +214,21 @@ function setGeometry(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
 
-function updateCamera(e){
+function updateCameraAngle(e){
   if (document.pointerLockElement == canvas) camera.mouseMove(e);
+}
+
+function updateCameraPosition(e){
+  if (document.pointerLockElement == canvas) camera.updatePos(e);
 }
 
 function lockChange(){
   if (document.pointerLockElement != canvas) canvas.requestPointerLock();
 }
 
+addEventListener("mousemove", updateCameraAngle, false);
+addEventListener("mousedown", lockChange, false);
+addEventListener("keydown", updateCameraPosition, false);
 addEventListener("load", () => {
 	main().catch(console.error);
 });
