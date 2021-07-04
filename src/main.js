@@ -1,5 +1,6 @@
 import {utils} from "./utils.js";
 import {Camera} from "./Camera.js";
+import { ShadersHandler } from "./ShadersHandler.js";
 
 var camera;
 var canvas;
@@ -10,23 +11,11 @@ async function main() {
   if (!gl) {
     return;
   }
-  var vertexShaderSource = {d:""};
-  await  utils.loadFile("shaders/vs_skybox.glsl", vertexShaderSource, function(shaderSource, data){
-    data.d = shaderSource;
-  });
-  var fragmentShaderSource={d:""};
-  await  utils.loadFile("shaders/fs_skybox.glsl", fragmentShaderSource, function(shaderSource, data){
-    data.d = shaderSource;
-  });
-  console.log(gl);
+
+  var sh = new ShadersHandler();
+  await sh.loadProgramsDict("/config/shaders.json", gl);
+  var program = sh.getProgram("skybox");
   
-
-  var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vertexShaderSource.d);
-  var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource.d);
-
-  // Link the two shaders into a program
-  var program = utils.createProgram(gl, vertexShader, fragmentShader);
-
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
 

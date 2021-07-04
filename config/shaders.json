@@ -1,0 +1,9 @@
+{ 
+    "shaders":[
+    {
+        "name": "skybox",
+        "vertexShader": "vs_skybox.glsl",
+        "fragmentShader": "fs_skybox.glsl"
+    }
+    ]
+}

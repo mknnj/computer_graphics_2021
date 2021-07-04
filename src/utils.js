@@ -97,10 +97,6 @@ createProgram:function(gl, vertexShader, fragmentShader) {
 	},
 	
 	
-	
-	
-	
-	
 //*** SHADERS UTILS	
 	/*Function to load a shader's code, compile it and return the handle to it
 	Requires:
@@ -185,46 +181,7 @@ createProgram:function(gl, vertexShader, fragmentShader) {
 	},
 		
 	
-//*** Interaction UTILS	
-	initInteraction: function(){
-		var keyFunction =function(e) {
-			
-			if (e.keyCode == 37) {	// Left arrow
-				cx-=delta;
-			}
-			if (e.keyCode == 39) {	// Right arrow
-				cx+=delta;
-			}	
-			if (e.keyCode == 38) {	// Up arrow
-				cz-=delta;
-			}
-			if (e.keyCode == 40) {	// Down arrow
-				cz+=delta;
-			}
-			if (e.keyCode == 107) {	// Add
-				cy+=delta;
-			}
-			if (e.keyCode == 109) {	// Subtract
-				cy-=delta;
-			}
-			
-			if (e.keyCode == 65) {	// a
-				angle-=delta*10.0;
-			}
-			if (e.keyCode == 68) {	// d
-				angle+=delta*10.0;
-			}	
-			if (e.keyCode == 87) {	// w
-				elevation+=delta*10.0;
-			}
-			if (e.keyCode == 83) {	// s
-				elevation-=delta*10.0;
-			}
-			
-		}
-		//'window' is a JavaScript object (if "canvas", it will not work)
-		window.addEventListener("keyup", keyFunction, false);		
-	},
+
 	
 //*** MATH LIBRARY
 
