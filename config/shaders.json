@@ -3,7 +3,9 @@
     {
         "name": "skybox",
         "vertexShader": "vs_skybox.glsl",
-        "fragmentShader": "fs_skybox.glsl"
+        "fragmentShader": "fs_skybox.glsl",
+        "attribNames": ["a_position"],
+        "uniformNames": ["u_skybox", "u_viewDirectionProjectionInverse"]
     }
     ]
 }

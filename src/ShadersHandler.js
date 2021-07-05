@@ -3,6 +3,7 @@ import {utils} from "./utils.js"
 export class ShadersHandler{
     constructor(){
         this.programsDict = {};
+        this.programsInfo;
     }
 
     async readJson(programsInfoFile){
@@ -13,9 +14,9 @@ export class ShadersHandler{
         return programsInfo.d;
     }
 
-    async loadProgramsDict(programsInfo, gl){
-        programsInfo = await this.readJson(programsInfo);
-        for(let i of programsInfo.shaders){
+    async loadProgramsDict(programsInfoPath, gl){
+        this.programsInfo = await this.readJson(programsInfoPath);
+        for(let i of this.programsInfo.shaders){
             let vertexShaderSource = {d:""};
             await  utils.loadFile("shaders/"+i.vertexShader, vertexShaderSource, function(shaderSource, data){
                 data.d = shaderSource;
@@ -33,5 +34,9 @@ export class ShadersHandler{
 
     getProgram(name){
         return this.programsDict[name];
+    }
+
+    getJson(name){
+        return this.programsInfo.shaders.filter(a => a.name === name)[0];
     }
 }

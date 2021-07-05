@@ -1,9 +1,11 @@
 import {utils} from "./utils.js";
 import {Camera} from "./Camera.js";
 import { ShadersHandler } from "./ShadersHandler.js";
+import { Skybox } from "./Skybox.js";
 
 var camera;
 var canvas;
+var skybox;
 
 async function main() {
   canvas = document.querySelector("#my-canvas");
@@ -14,108 +16,26 @@ async function main() {
 
   var sh = new ShadersHandler();
   await sh.loadProgramsDict("/config/shaders.json", gl);
-  var program = sh.getProgram("skybox");
-  
-  // look up where the vertex data needs to go.
-  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var skyboxProgram = sh.getProgram("skybox");
 
-  // lookup uniforms
-  var skyboxLocation = gl.getUniformLocation(program, "u_skybox");
-  var viewDirectionProjectionInverseLocation =
-      gl.getUniformLocation(program, "u_viewDirectionProjectionInverse");
+  skybox = new Skybox(skyboxProgram, sh.getJson("skybox"), gl);
 
   // Create a buffer for positions
   var positionBuffer = gl.createBuffer();
   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  skybox.loadSkybox();
   // Put the positions in the buffer
   setGeometry(gl);
 
-  // Create a texture.
-  var texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
-
-  const faceInfos = [
-    {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-      url: 'assets/skybox/right.jpg',
-    },
-    {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-      url: 'assets/skybox/left.jpg',
-    },
-    {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-      url: 'assets/skybox/up.jpg',
-    },
-    {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-      url: 'assets/skybox/down.jpg',
-    },
-    {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-      url: 'assets/skybox/front.jpg',
-    },
-    {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-      url: 'assets/skybox/back.jpg',
-    },
-  ];
-  faceInfos.forEach((faceInfo) => {
-    const {target, url} = faceInfo;
-
-    // Upload the canvas to the cubemap face.
-    const level = 0;
-    const internalFormat = gl.RGBA;
-    const width = 512;
-    const height = 512;
-    const format = gl.RGBA;
-    const type = gl.UNSIGNED_BYTE;
-
-    // setup each face so it's immediately renderable
-    gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
-
-    // Asynchronously load an image
-    const image = new Image();
-    image.src = url;
-    image.addEventListener('load', function() {
-      // Now that the image has loaded make copy it to the texture.
-      gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
-      gl.texImage2D(target, level, internalFormat, format, type, image);
-      gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    });
-  });
-  gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-  gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-  function radToDeg(r) {
-    return r * 180 / Math.PI;
-  }
-
-  function degToRad(d) {
-    return d * Math.PI / 180;
-  }
 
   camera = new Camera();
-  
-
-  var cameraYRotationRadians = degToRad(0);
-
-  var spinCamera = true;
-  // Get the starting time.
-  var then = 0;
 
   requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene(time) {
-    // convert to seconds
-    time *= 0.001;
-    // Subtract the previous time from the current time
-    var deltaTime = time - then;
-    // Remember the current time for the next frame.
-    then = time;
-
+  function drawScene() {
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
     // Tell WebGL how to convert from clip space to pixels
@@ -128,10 +48,10 @@ async function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Tell it to use our program (pair of shaders)
-    gl.useProgram(program);
+    gl.useProgram(skyboxProgram);
 
     // Turn on the position attribute
-    gl.enableVertexAttribArray(positionLocation);
+    gl.enableVertexAttribArray(skybox.positionLocation);
 
     // Bind the position buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -143,22 +63,13 @@ async function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset);
+        skybox.positionLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
       utils.MakePerspective(30, aspect, 1, 2000);
 
-    // camera going in circle 2 units from origin looking at origin
-    /*var cameraPosition = [Math.cos(time * .1), 0, Math.sin(time * .1)];
-    var target = [0, 0, 0];
-    var up = [0, 1, 0];
-    // Compute the camera's matrix using look at.
-    var cameraMatrix = utils.LookAt(cameraPosition, target, up);
-
-    // Make a view matrix from the camera matrix.
-    var viewMatrix = utils.invertMatrix(cameraMatrix);*/
     var viewMatrix = camera.getViewMatrix();
 
     // We only care about direciton so remove the translation
@@ -173,11 +84,11 @@ async function main() {
 
     // Set the uniforms
     gl.uniformMatrix4fv(
-        viewDirectionProjectionInverseLocation, false,
+        skybox.viewDirectionProjectionInverseLocation, false,
         utils.transposeMatrix(viewDirectionProjectionInverseMatrix));
 
     // Tell the shader to use texture unit 0 for u_skybox
-    gl.uniform1i(skyboxLocation, 0);
+    gl.uniform1i(skybox.skyboxLocation, 0);
 
     // let our quad pass the depth test at 1.0
     gl.depthFunc(gl.LEQUAL);
