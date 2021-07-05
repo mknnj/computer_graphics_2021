@@ -1,0 +1,34 @@
+{ 
+    "skybox":[
+    {
+        "name": "right",
+        "path": "assets/skybox/right.jpg"
+    },
+    {
+        "name": "left",
+        "path": "assets/skybox/left.jpg"
+    },
+    {
+        "name": "up",
+        "path": "assets/skybox/up.jpg"
+    },
+    {
+        "name": "down",
+        "path": "assets/skybox/down.jpg"
+    },
+    {
+        "name": "front",
+        "path": "assets/skybox/front.jpg"
+    },
+    {
+        "name": "back",
+        "path": "assets/skybox/back.jpg" 
+    }
+    ],
+    "parameters":
+    {
+        "level": 0,
+        "width": 512,
+        "height": 512
+    }
+}

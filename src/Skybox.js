@@ -8,18 +8,39 @@ export class Skybox {
         this.positionLocation;
         this.skyboxLocation;
         this.viewDirectionProjectionInverseLocation;
+        this.positionBuffer = this.gl.createBuffer();
+        this.textureInfo;
+        this.textureDict = {};
 
-        this.setLocation();
+        this.setUp();
+        this.setGeometry();
     }
 
-    setLocation(){
+    setUp(){
         this.positionLocation = this.gl.getAttribLocation(this.program, this.jsonObj.attribNames[0]);
 
         this.skyboxLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[0]);
         this.viewDirectionProjectionInverseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[1]);
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
     }
 
-    loadSkybox(){
+    setGeometry(){
+        var positions = new Float32Array(
+            [
+              -1, -1,
+               1, -1,
+              -1,  1,
+              -1,  1,
+               1, -1,
+               1,  1,
+            ]);
+          this.gl.bufferData(this.gl.ARRAY_BUFFER, positions, this.gl.STATIC_DRAW);
+    }
+
+    async loadSkybox(textureInfoPath){
+        this.textureInfo = await this.readJson(textureInfoPath);
+        this.textureInfo.skybox.forEach(x => { this.textureDict[x.name] = x.path; });
          // Create a texture.
         var texture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
@@ -27,37 +48,37 @@ export class Skybox {
         const faceInfos = [
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-            url: 'assets/skybox/right.jpg',
+            url: this.textureDict["right"],
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-            url: 'assets/skybox/left.jpg',
+            url: this.textureDict["left"],
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-            url: 'assets/skybox/up.jpg',
+            url: this.textureDict["up"],
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            url: 'assets/skybox/down.jpg',
+            url: this.textureDict["down"],
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-            url: 'assets/skybox/front.jpg',
+            url: this.textureDict["front"],
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            url: 'assets/skybox/back.jpg',
+            url: this.textureDict["back"],
         },
         ];
         faceInfos.forEach((faceInfo) => {
             const {target, url} = faceInfo;
 
             // Upload the canvas to the cubemap face.
-            const level = 0;
+            const level = this.textureInfo.parameters.level;
             const internalFormat = this.gl.RGBA;
-            const width = 512;
-            const height = 512;
+            const width = this.textureInfo.parameters.width;
+            const height = this.textureInfo.parameters.height;
             const format = this.gl.RGBA;
             const type = this.gl.UNSIGNED_BYTE;
 
@@ -77,5 +98,13 @@ export class Skybox {
         });
         this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
         this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_LINEAR);
+    }
+
+    async readJson(textureInfoFile){
+        let textureInfo = {d:""};
+        await utils.loadFile(textureInfoFile, textureInfo, function(textureInfoData, data){
+            data.d = JSON.parse(textureInfoData);
+        });
+        return textureInfo.d;
     }
 }
