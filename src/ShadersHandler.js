@@ -7,26 +7,26 @@ export class ShadersHandler{
     }
 
     async readJson(programsInfoFile){
-        let programsInfo = {d:""};
-        await utils.loadFile(programsInfoFile, programsInfo, function(programsInfoData, data){
-            data.d = JSON.parse(programsInfoData);
+        var programsInfo;
+        await utils.loadFiles([programsInfoFile], function(programsInfoData){
+            programsInfo = JSON.parse(programsInfoData);
         });
-        return programsInfo.d;
+        return programsInfo;
     }
 
     async loadProgramsDict(programsInfoPath, gl){
         this.programsInfo = await this.readJson(programsInfoPath);
         for(let i of this.programsInfo.shaders){
-            let vertexShaderSource = {d:""};
-            await  utils.loadFile("shaders/"+i.vertexShader, vertexShaderSource, function(shaderSource, data){
-                data.d = shaderSource;
+            var vertexShaderSource;
+            await  utils.loadFiles(["shaders/"+i.vertexShader], (shaderSource) => {
+                vertexShaderSource = shaderSource;
             });
-            let fragmentShaderSource={d:""};
-            await  utils.loadFile("shaders/"+i.fragmentShader, fragmentShaderSource, function(shaderSource, data){
-                data.d = shaderSource;
+            var fragmentShaderSource;
+            await  utils.loadFiles(["shaders/"+i.fragmentShader], (shaderSource) => {
+                fragmentShaderSource = shaderSource;
             });
-            let vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vertexShaderSource.d);
-            let fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource.d);
+            let vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+            let fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
             let program = utils.createProgram(gl, vertexShader, fragmentShader);
             this.programsDict[i.name] = program;
         }

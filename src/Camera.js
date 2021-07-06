@@ -4,17 +4,23 @@ const RSPE = .1;
 const MSPE = .01;
 
 export class Camera {
-    constructor(){
+    constructor(gl){
+        this.gl = gl;
         this.pos = [0, 0, 0];
         this.elev = 0.0;
         this.ang = 0.0;
         this.viewMat = null;
+        this.projectionMatrix = null;
+        this.viewDirectionProjectionMatrix = null;
+        this.viewDirectionProjectionInverseMatrix = null;
         this.front = false;
         this.back = false;
         this.left = false;
         this.right = false;
         this.high = false;
         this.down = false;
+
+        this.updateProjection();
     }
 
     getViewMatrix(){
@@ -56,5 +62,15 @@ export class Camera {
         this.pos[0] += (Math.sin(utils.degToRad(this.ang)) * front - Math.cos(utils.degToRad(this.ang)) * left) * MSPE;
         this.pos[2] -= (Math.cos(utils.degToRad(this.ang)) * front + Math.sin(utils.degToRad(this.ang)) * left) * MSPE;
         this.pos[1] += high * MSPE;
+    }
+
+    updateProjection(){
+        var aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
+        this.projectionMatrix = utils.MakePerspective(30, aspect, 1, 2000);
+    }
+
+    updateMatrices(){
+        this.viewDirectionProjectionMatrix = utils.multiplyMatrices(this.projectionMatrix, this.getViewMatrix());
+        this.viewDirectionProjectionInverseMatrix = utils.invertMatrix(this.viewDirectionProjectionMatrix);
     }
 }
