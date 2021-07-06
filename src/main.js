@@ -83,6 +83,7 @@ function drawScene(){
   // Draw the geometry.
   gl.drawArrays(gl.TRIANGLES, 0, 1 * 6);
 
+  camera.updatePos();
   requestAnimationFrame(drawScene);
 }
 
@@ -90,8 +91,12 @@ function updateCameraAngle(e){
   if (document.pointerLockElement == canvas) camera.mouseMove(e);
 }
 
-function updateCameraPosition(e){
-  if (document.pointerLockElement == canvas) camera.updatePos(e);
+function activateCameraMovement(e){
+  if (document.pointerLockElement == canvas) camera.activateMovement(e);
+}
+
+function deactivateCameraMovement(e){
+  if (document.pointerLockElement == canvas) camera.deactivateMovement(e);
 }
 
 function lockChange(){
@@ -100,7 +105,8 @@ function lockChange(){
 
 addEventListener("mousemove", updateCameraAngle, false);
 addEventListener("mousedown", lockChange, false);
-addEventListener("keydown", updateCameraPosition, false);
+addEventListener("keydown", activateCameraMovement, false);
+addEventListener("keyup", deactivateCameraMovement, false);
 addEventListener("load", () => {
 	main().catch(console.error);
 });
