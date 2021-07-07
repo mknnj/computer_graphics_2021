@@ -33,8 +33,6 @@ export class Cube {
         this.viewLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[3]);
         this.worldLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[4]);
         
-        
-
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), this.gl.STATIC_DRAW);
         

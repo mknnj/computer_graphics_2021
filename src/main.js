@@ -36,6 +36,7 @@ async function main() {
     var brickMesh = await objParser.parseObjFile("brick.obj");
     var ghostMesh = await objParser.parseObjFile("ghost.obj");
     var litProgram = sh.getProgram("lit");
+    
     bricks = [];
 
     var planeMesh = {
@@ -49,7 +50,7 @@ async function main() {
                     0.0, 1.0, 0.0],
         indices : [0,1,2,3,0,2]
     }
-    console.log(planeMesh)
+    console.log(ghostMesh)
 
     light = {
         diffuse : [1, 0.5, 0, 1],

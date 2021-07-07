@@ -13,6 +13,18 @@
         "fragmentShader": "fs_lit.glsl",
         "attribNames": ["a_position","a_normal"],
         "uniformNames": ["u_diffuse", "u_lightDirection", "u_projection", "u_view", "u_world"]
+    },
+    {
+        "name": "main",
+        "vertexShader": "vs_main.glsl",
+        "fragmentShader": "fs_main.glsl",
+        "attribNames": ["a_position","a_normal", "a_uv"],
+        "uniformNames": ["u_viewWorldMatrix", "u_projectionMatrix", "u_normalMatrix",
+             "u_texture", "u_isTexturePresent","u_eyePos",
+             "u_diffuseColor", "u_specularColor","u_ambientColor",
+             "u_dToonTh", "u_sToonTh",
+             "u_pointLightColor", "u_pointLightPosition","u_pointLightTarget","u_pointLightDecay",
+             "u_dirLightDirection", "u_dirLightColor"]
     }
     ]
 }

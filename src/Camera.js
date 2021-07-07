@@ -42,10 +42,10 @@ export class Camera {
     }
 
     setDir(e, bool){
-        if (e.key == "w") this.front = bool;
-        if (e.key == "s") this.back = bool;
-        if (e.key == "a") this.left = bool;
-        if (e.key == "d") this.right = bool;
+        if (e.key.toLowerCase() == "w") this.front = bool;
+        if (e.key.toLowerCase() == "s") this.back = bool;
+        if (e.key.toLowerCase() == "a") this.left = bool;
+        if (e.key.toLowerCase() == "d") this.right = bool;
         if (e.key == " ") this.high = bool;
         if (e.key == "Shift") this.down = bool;
     }
