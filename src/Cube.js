@@ -1,11 +1,13 @@
 import {utils} from "./utils.js"
 
 export class Cube {
-    constructor(program, jsonObj, gl, mesh, position){
+    constructor(program, jsonObj, gl, mesh, position, scale){
         this.mesh = mesh;
         this.position = position;
         this.rotation = [0, 0, 0];
-        this.scale = 0.01;
+        this.scale = scale;
+        console.log(this.scale)
+
         this.gl = gl;
         this.jsonObj = jsonObj;
         this.program = program;
@@ -51,6 +53,7 @@ export class Cube {
 
     draw(camera, light){
         this.gl.useProgram(this.program);
+        this.gl.bindVertexArray(this.vao);
 
         this.gl.enableVertexAttribArray(this.positionLocation);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
