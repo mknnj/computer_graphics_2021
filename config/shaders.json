@@ -6,6 +6,13 @@
         "fragmentShader": "fs_skybox.glsl",
         "attribNames": ["a_position"],
         "uniformNames": ["u_skybox", "u_viewDirectionProjectionInverse"]
+    },
+    {
+        "name": "lit",
+        "vertexShader": "vs_lit.glsl",
+        "fragmentShader": "fs_lit.glsl",
+        "attribNames": ["a_position","a_normal"],
+        "uniformNames": ["u_diffuse", "u_lightDirection", "u_projection", "u_view", "u_world"]
     }
     ]
 }

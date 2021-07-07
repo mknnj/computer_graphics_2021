@@ -3,6 +3,7 @@ import {utils} from "./utils.js"
 export class Skybox {
     constructor(program, jsonObj, gl){
         this.program = program;
+        gl.useProgram(program);
         this.jsonObj = jsonObj;
         this.gl = gl;
         this.positionLocation;

@@ -2,10 +2,13 @@ import {utils} from "./utils.js";
 import {Camera} from "./Camera.js";
 import { ShadersHandler } from "./ShadersHandler.js";
 import { Skybox } from "./Skybox.js";
+import { ObjParser } from "./ObjParser.js";
+import { Cube } from "./Cube.js";
 
 var camera;
 var canvas;
 var skybox;
+var brick;
 var gl;
 
 async function main() {
@@ -18,6 +21,7 @@ async function main() {
     setViewportAndCanvas();
 
     var sh = new ShadersHandler();
+    var objParser = new ObjParser();
     await sh.loadProgramsDict("/config/shaders.json", gl);
     var skyboxProgram = sh.getProgram("skybox");
 
@@ -25,6 +29,10 @@ async function main() {
     skybox.loadSkybox("/config/textures.json");
 
     camera = new Camera(gl);
+
+    var brickMesh = await objParser.parseObjFile("brick.obj");
+    var litProgram = sh.getProgram("lit");
+    brick = new Cube(litProgram, sh.getJson("lit"), gl, brickMesh);
 
     drawScene();
 }
@@ -36,6 +44,7 @@ function drawScene(){
     camera.updatePos();
 
     skybox.draw(camera);
+    brick.draw(camera);
     requestAnimationFrame(drawScene);
 }
 

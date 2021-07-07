@@ -498,7 +498,7 @@ createProgram:function(gl, vertexShader, fragmentShader) {
 		var S  = this.MakeScaleMatrix(s);
 		var T =  this.MakeTranslateMatrix(tx, ty, tz);         
 		   
-		out = this.multiplyMatrices(Rz, S);
+		let out = this.multiplyMatrices(Rz, S);
 		out = this.multiplyMatrices(Ry, out);
 		out = this.multiplyMatrices(Rx, out);  
 		out = this.multiplyMatrices(T, out);
