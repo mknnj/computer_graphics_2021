@@ -126,11 +126,13 @@ export class Skybox {
         var offset = 0;        // start at the beginning of the buffer
         this.gl.vertexAttribPointer(
             this.positionLocation, size, type, normalize, stride, offset);
+        
 
+        //console.log(camera.getSkyboxMatrix())
         // Set the uniforms
         this.gl.uniformMatrix4fv(
             this.viewDirectionProjectionInverseLocation, false,
-            utils.transposeMatrix(camera.viewDirectionProjectionInverseMatrix));
+            utils.transposeMatrix(camera.getSkyboxMatrix()));
 
         // Tell the shader to use texture unit 0 for u_skybox
         this.gl.uniform1i(this.skyboxLocation, 0);

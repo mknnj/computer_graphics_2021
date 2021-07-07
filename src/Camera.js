@@ -1,7 +1,7 @@
 import {utils} from "./utils.js";
 
 const RSPE = .1;
-const MSPE = .01;
+const MSPE = .1;
 
 export class Camera {
     constructor(gl){
@@ -72,5 +72,13 @@ export class Camera {
     updateMatrices(){
         this.viewDirectionProjectionMatrix = utils.multiplyMatrices(this.projectionMatrix, this.getViewMatrix());
         this.viewDirectionProjectionInverseMatrix = utils.invertMatrix(this.viewDirectionProjectionMatrix);
+    }
+
+    getSkyboxMatrix(){
+        //console.log(this.projectionMatrix)
+        
+        var skyboxMatrix = utils.multiplyMatrices(this.projectionMatrix, utils.MakeView(0,0,0,this.elev,this.ang));
+        
+        return utils.invertMatrix(skyboxMatrix);
     }
 }

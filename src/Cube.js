@@ -1,16 +1,18 @@
 import {utils} from "./utils.js"
 
 export class Cube {
-    constructor(program, jsonObj, gl, mesh){
+    constructor(program, jsonObj, gl, mesh, position){
         this.mesh = mesh;
-        this.position = [0, 0, 0];
+        this.position = position;
         this.rotation = [0, 0, 0];
-        this.scale = 1;
+        this.scale = 0.01;
         this.gl = gl;
         this.jsonObj = jsonObj;
         this.program = program;
         this.gl.useProgram(program);
+
         this.vao = this.gl.createVertexArray();
+        this.gl.bindVertexArray(this.vao);
         this.positionBuffer = this.gl.createBuffer();
         this.normalBuffer = this.gl.createBuffer();
         this.indexBuffer = this.gl.createBuffer();
@@ -19,6 +21,7 @@ export class Cube {
     }
 
     setUp(){
+        this.gl.useProgram(this.program);
         this.positionLocation = this.gl.getAttribLocation(this.program, this.jsonObj.attribNames[0]);
         this.normalLocation = this.gl.getAttribLocation(this.program, this.jsonObj.attribNames[1]);
 
@@ -28,21 +31,16 @@ export class Cube {
         this.viewLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[3]);
         this.worldLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[4]);
         
-        this.gl.bindVertexArray(this.vao);
+        
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.mesh.vertices, this.gl.STATIC_DRAW);
-        this.gl.enableVertexAttribArray(this.positionLocation);
-        this.gl.vertexAttribPointer(this.positionLocation, 3, this.gl.FLOAT, false, 0, 0);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), this.gl.STATIC_DRAW);
         
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.mesh.vertexNormals, this.gl.STATIC_DRAW);
-        this.gl.enableVertexAttribArray(this.normalLocation);
-        this.gl.vertexAttribPointer(this.normalLocation, 3, this.gl.FLOAT, false, 0, 0);
-
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertexNormals), this.gl.STATIC_DRAW);
+        
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, this.mesh.indices, this.gl.STATIC_DRAW);
-        console.log(this.mesh)
+        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.mesh.indices), this.gl.STATIC_DRAW);
     }
 
     updateWorld(){
@@ -51,8 +49,16 @@ export class Cube {
                                     this.scale);
     }
 
-    draw(camera){
+    draw(camera, light){
         this.gl.useProgram(this.program);
+
+        this.gl.enableVertexAttribArray(this.positionLocation);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.vertexAttribPointer(this.positionLocation, 3, this.gl.FLOAT, false, 0, 0);
+        
+        this.gl.enableVertexAttribArray(this.normalLocation);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+        this.gl.vertexAttribPointer(this.normalLocation, 3, this.gl.FLOAT, false, 0, 0);
         
         this.gl.uniformMatrix4fv(this.projectionLocation, false,
             utils.transposeMatrix(camera.projectionMatrix));
@@ -60,11 +66,12 @@ export class Cube {
             utils.transposeMatrix(camera.viewMat));
         this.gl.uniformMatrix4fv(this.worldLocation, false,
             utils.transposeMatrix(this.worldMatrix));
-        this.gl.uniform4fv(this.diffuseLocation,[1, 0.7, 0.5, 1]);
-        this.gl.uniform3fv(this.lightDirectionLocation, utils.normalize([-1, 3, 5]));
-        
+        this.gl.uniform4fv(this.diffuseLocation,light.diffuse);
+        this.gl.uniform3fv(this.lightDirectionLocation, utils.normalize(light.direction));
+
         this.gl.bindVertexArray(this.vao);
-        
-        this.gl.drawElements(this.gl.TRIANGLES, 0, this.gl.UNSIGNED_SHORT, 0 );
+        this.gl.drawElements(this.gl.TRIANGLES, this.mesh.indices.length, this.gl.UNSIGNED_SHORT, 0 );
+        this.gl.disableVertexAttribArray(this.positionLocation);
+        this.gl.disableVertexAttribArray(this.normalLocation);
     }
 }

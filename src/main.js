@@ -8,8 +8,10 @@ import { Cube } from "./Cube.js";
 var camera;
 var canvas;
 var skybox;
-var brick;
+var bricks;
+var plane;
 var gl;
+var light;
 
 async function main() {
     canvas = document.querySelector("#my-canvas");
@@ -32,8 +34,33 @@ async function main() {
 
     var brickMesh = await objParser.parseObjFile("brick.obj");
     var litProgram = sh.getProgram("lit");
-    brick = new Cube(litProgram, sh.getJson("lit"), gl, brickMesh);
+    bricks = [];
 
+    var planeMesh = {
+        vertices : [10.0, 0.0, 10.0,
+                    10.0, 0.0, -10.0,
+                    -10.0, 0.0, -10.0,
+                    -10.0, 0.0, 10.0],
+        vertexNormals : [0.0, 1.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 0.0],
+        indices : [0,1,2,1,2,2,0,2,3,4,5,2]
+    }
+    console.log(planeMesh)
+
+    light = {
+        diffuse : [1, 0.5, 0, 1],
+        direction : [1, -5, 1]
+    }
+    
+    plane = new Cube(litProgram, sh.getJson("lit"), gl, planeMesh, [0, -1, 0]);
+    bricks.push( new Cube(litProgram, sh.getJson("lit"), gl, brickMesh, [1, 0, -5]));
+    bricks.push( new Cube(litProgram, sh.getJson("lit"), gl, brickMesh, [0, 0, -6]));
+    bricks.push( new Cube(litProgram, sh.getJson("lit"), gl, brickMesh, [0, 0, -7]));
+    bricks.push( new Cube(litProgram, sh.getJson("lit"), gl, brickMesh, [0, 0, -8]));
+    bricks.push( new Cube(litProgram, sh.getJson("lit"), gl, brickMesh, [0, 1, -9]));
+    
     drawScene();
 }
 
@@ -42,9 +69,12 @@ function drawScene(){
 
     camera.updateMatrices();
     camera.updatePos();
-
+    
     skybox.draw(camera);
-    brick.draw(camera);
+    
+    bricks.forEach((a)=>a.draw(camera, light));
+    plane.draw(camera,light);
+
     requestAnimationFrame(drawScene);
 }
 
@@ -54,7 +84,7 @@ function setViewportAndCanvas(){
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    gl.enable(gl.CULL_FACE);
+    //gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
     clearBits();
@@ -82,7 +112,7 @@ function lockChange(){
 }
 
 function updateCameraProjection(){
-    if(camera != null) camera.updateCameraProjection();
+    if(camera != null) camera.updateProjection();
 }
 
 addEventListener("mousemove", updateCameraAngle, false);
