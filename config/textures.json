@@ -2,33 +2,33 @@
     "skybox":[
     {
         "name": "right",
-        "path": "assets/skybox/right.jpg"
+        "path": "assets/skybox/night/right.jpg"
     },
     {
         "name": "left",
-        "path": "assets/skybox/left.jpg"
+        "path": "assets/skybox/night/left.jpg"
     },
     {
         "name": "up",
-        "path": "assets/skybox/up.jpg"
+        "path": "assets/skybox/night/up.jpg"
     },
     {
         "name": "down",
-        "path": "assets/skybox/down.jpg"
+        "path": "assets/skybox/night/down.jpg"
     },
     {
         "name": "front",
-        "path": "assets/skybox/front.jpg"
+        "path": "assets/skybox/night/front.jpg"
     },
     {
         "name": "back",
-        "path": "assets/skybox/back.jpg" 
+        "path": "assets/skybox/night/back.jpg" 
     }
     ],
     "parameters":
     {
         "level": 0,
-        "width": 512,
-        "height": 512
+        "width": 1024,
+        "height": 1024
     }
 }
