@@ -70,5 +70,5 @@ void main() {
                             pointLightDiffuseToonColor + 
                             dirLightDiffuseToonColor +
                             pointLightSpecularToon +
-                            dirLightSpecularToon, 0.0, 1.0),1.0); 
+                            dirLightSpecularToon, 0.0, 1.0)); 
 }

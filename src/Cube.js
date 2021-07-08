@@ -6,7 +6,6 @@ export class Cube {
         this.position = position;
         this.rotation = [0, 0, 0];
         this.scale = scale;
-        console.log(this.scale)
 
         this.gl = gl;
         this.jsonObj = jsonObj;
