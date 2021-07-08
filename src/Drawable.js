@@ -37,7 +37,7 @@ export class Drawable {
         this.eyePositionLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[5]);
         this.diffuseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[6]);
         this.specularLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[7]);
-        this.ambientLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
+        this.ambientMatColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
         this.diffuseToonThLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
         this.specularToonThLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
         this.pointLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[11]);
@@ -46,6 +46,7 @@ export class Drawable {
         this.pointLightDecayLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[14]);
         this.directionalLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[15]);
         this.directionLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[16]);
+        this.ambientLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[17]);
         
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), this.gl.STATIC_DRAW);
@@ -83,7 +84,7 @@ export class Drawable {
         this.gl.vertexAttribPointer(this.uvLocation, 2, this.gl.FLOAT, false, 0, 0);
         
         //matrices uniform
-        var viewWorld = utils.multiplyMatrices(camera.getViewMatrix(), this.worldMatrix);
+        var viewWorld = utils.multiplyMatrices(camera.viewMat, this.worldMatrix);
         this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, false, utils.transposeMatrix(viewWorld));
         this.gl.uniformMatrix4fv(this.projectionMatrixLocation, false, utils.transposeMatrix(utils.multiplyMatrices(camera.projectionMatrix, viewWorld)));
         this.gl.uniformMatrix4fv(this.normalMatrixLocation, false, utils.transposeMatrix(utils.invertMatrix(utils.transposeMatrix(viewWorld))));
@@ -97,15 +98,16 @@ export class Drawable {
         this.gl.uniform3fv(this.eyePositionLocation, camera.pos);
         this.gl.uniform4fv(this.diffuseLocation, this.mesh.material.diffuse);
         this.gl.uniform4fv(this.specularLocation, this.mesh.material.specular);
-        this.gl.uniform4fv(this.ambientLocation, lights.ambient.color);
+        this.gl.uniform4fv(this.ambientMatColorLocation, this.mesh.material.ambient);
         this.gl.uniform1f(this.diffuseToonThLocation, this.mesh.material.diffuseTh);
         this.gl.uniform1f(this.specularToonThLocation, this.mesh.material.specularTh);
         this.gl.uniform4fv(this.pointLightColorLocation, lights.pointLight.color);
-        this.gl.uniform3fv(this.pointLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix), lights.pointLight.position));
+        this.gl.uniform3fv(this.pointLightLocation, utils.multiplyMatrixVector(camera.viewMat, lights.pointLight.position).slice(0,3));
         this.gl.uniform1f(this.pointLightTargetLocation, lights.pointLight.target);
         this.gl.uniform1f(this.pointLightDecayLocation, lights.pointLight.decay);
-        this.gl.uniform3fv(this.directionalLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix), lights.directionalLight.direction));
+        this.gl.uniform3fv(this.directionalLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.viewMat), lights.directionalLight.direction));
         this.gl.uniform4fv(this.directionLightColorLocation, lights.directionalLight.color);
+        this.gl.uniform4fv(this.ambientLightLocation, lights.ambient.color);
 
         this.gl.bindVertexArray(this.vao);
         this.gl.drawElements(this.gl.TRIANGLES, this.mesh.indices.length, this.gl.UNSIGNED_SHORT, 0 );

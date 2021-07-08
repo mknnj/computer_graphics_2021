@@ -51,35 +51,52 @@ async function main() {
         indices : [0,1,2,3,0,2]
     }
 
-    var material = {
-        diffuse: [1, 0.5, 0, 1],
-        specular: [1, 1, 1, 1],
+    var ghostMaterial = {
+        diffuse: [0.6, 0, 0, 1],
+        ambient: [0.2, 0, 0, 1],
+        specular: [0.2, 0.2, 0.2, 1],
+        diffuseTh: 0.5,
+        specularTh: 0.5
+    }
+
+    var brickMaterial = {
+        diffuse: [0.6, 0.6, 0, 1],
+        ambient: [0.2, 0.2, 0, 1],
+        specular: [0.2, 0.2, 0.2, 1],
+        diffuseTh: 0.5,
+        specularTh: 0.5
+    }
+
+    var planeMaterial = {
+        diffuse: [0.2, 0.2, 0.2, 1],
+        ambient: [0.1, 0.1, 0.1, 1],
+        specular: [0, 0, 0, 0],
         diffuseTh: 0.5,
         specularTh: 0.5
     }
 
     lights = {
         ambient : {
-            color: [1, 0.5, 0, 1]
+            color: [1, 1, 1, 1]
         },
         directionalLight : {
-            color : [1, 0.5, 0, 1],
-            direction : [0, 1, 0]
+            color : [1, 1, 1, 1],
+            direction : [1, 1, 0]
         },
         pointLight : {
-            color : [0, 0, 0.7, 1],
-            position : [0, 1, 0],
+            color : [1, 1, 1, 1],
+            position : [0, 0.3, 0, 1],
             decay: 0.5,
             target: 0.5
         }
     }
     
-    planeMesh.material = material;
-    brickMesh.material = material;
-    ghostMesh.material = material;
+    planeMesh.material = planeMaterial;
+    brickMesh.material = brickMaterial;
+    ghostMesh.material = ghostMaterial;
 
     plane = new Drawable(mainProgram, sh.getJson("main"), gl, planeMesh, [0, -1, 0], [0, 0, 0], 1);
-    bricks.push( new Drawable(mainProgram, sh.getJson("main"), gl, brickMesh, [1, 0, -5], [0, 0, 0], 0.01));
+    bricks.push( new Drawable(mainProgram, sh.getJson("main"), gl, brickMesh, [0, 1.2, 0], [0, 0, 0], 0.01));
     bricks.push( new Drawable(mainProgram, sh.getJson("main"), gl, brickMesh, [0, 0, -6], [0, 0, 0], 0.01));
     bricks.push( new Drawable(mainProgram, sh.getJson("main"), gl, brickMesh, [0, 0, -7], [0, 0, 0], 0.01));
     bricks.push( new Drawable(mainProgram, sh.getJson("main"), gl, ghostMesh, [0, 0, -8], [0, 0, 0], 1));
@@ -97,7 +114,7 @@ function drawScene(){
     skybox.draw(camera);
     
     bricks.forEach((a)=>a.draw(camera, lights));
-    plane.draw(camera, lights);
+    //plane.draw(camera, lights);
 
     requestAnimationFrame(drawScene);
 }

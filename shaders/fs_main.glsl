@@ -14,7 +14,7 @@ uniform vec3 u_eyePos; //eye position is camera position
 
 uniform vec4 u_diffuseColor; //material diffuse color
 uniform vec4 u_specularColor; //material specular color
-uniform vec4 u_ambientColor; //material ambient color
+uniform vec4 u_ambientMatColor; //material ambient color
 uniform float u_dToonTh; //toon shading threshold for diffuse component
 uniform float u_sToonTh; //toon shading threshold for specular component
 
@@ -28,14 +28,20 @@ uniform float u_pointLightDecay; //point light decay (beta)
 uniform vec3 u_dirLightDirection; //directional light direction
 uniform vec4 u_dirLightColor; //directional light color
 
+//ambient light
+uniform vec4 u_ambientLight; //ambient light color
+
 void main() {
     vec3 normalizedEyeDirVec = normalize(u_eyePos - v_position);
     vec3 normalizedNormal = normalize(v_normal);
 
     //handle texture color
-    vec4 textureColor = texture(u_texture, v_uv);
+    /*vec4 textureColor = texture(u_texture, v_uv);
     vec4 diffuseColor = u_diffuseColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;
-    vec4 ambientColor = u_ambientColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;
+    vec4 ambientColor = u_ambientMatColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;*/
+    vec4 diffuseColor = u_diffuseColor;
+    vec4 ambientColor = u_ambientMatColor;
+
 
     //point light
     vec4 pointLightColor = u_pointLightColor * pow(u_pointLightTarget / length(u_pointLightPosition - v_position), u_pointLightDecay);
@@ -46,29 +52,35 @@ void main() {
     vec4 dirLightColor = u_dirLightColor;
 
     //diffuse color w/ toon 
-    vec4 pointLightDiffuseToonColor = diffuseColor * pointLightColor * max(sign(dot(normalizedPointLightDirection, normalizedNormal) - u_dToonTh),0.0);
+    //vec4 pointLightDiffuseToonColor = diffuseColor * pointLightColor * max(sign(dot(normalizedPointLightDirection, normalizedNormal) - u_dToonTh),0.0);
 
-    vec4 dirLightDiffuseToonColor = diffuseColor * dirLightColor * max(sign(dot(normalizedDirLightDirection, normalizedNormal) - u_dToonTh),0.0);
+    //vec4 dirLightDiffuseToonColor = diffuseColor * dirLightColor * max(sign(dot(normalizedDirLightDirection, normalizedNormal) - u_dToonTh),0.0);
+
+    vec4 pointLightDiffuseToonColor = diffuseColor * pointLightColor * dot(normalizedPointLightDirection, normalizedNormal);
+    vec4 dirLightDiffuseToonColor = diffuseColor * dirLightColor * dot(normalizedDirLightDirection, normalizedNormal);
 
     //specular color w/ toon (Phong)
     vec3 reflectionPointLight = -reflect(normalizedPointLightDirection, normalizedNormal);
     float dotPointLightDirNormalVec = max(dot(normalizedNormal, normalizedPointLightDirection), 0.0);
     float dotReflectionPointEyeDir = max(dot(reflectionPointLight, normalizedEyeDirVec), 0.0);
     vec4 pointLightSpecularColor = pointLightColor * u_specularColor * max(sign(dotPointLightDirNormalVec),0.0);
-    vec4 pointLightSpecularToon = max(sign(dotReflectionPointEyeDir - u_sToonTh), 0.0) * pointLightSpecularColor;
+    //vec4 pointLightSpecularToon = max(sign(dotReflectionPointEyeDir - u_sToonTh), 0.0) * pointLightSpecularColor;
+    vec4 pointLightSpecularToon = pow(dotReflectionPointEyeDir, 0.2) * pointLightSpecularColor;
 
     vec3 reflectionDirLight = -reflect(normalizedDirLightDirection, normalizedNormal);
     float dotDirLightDirNormalVec = max(dot(normalizedNormal, normalizedDirLightDirection), 0.0);
     float dotReflectionDirEyeDir = max(dot(reflectionDirLight, normalizedEyeDirVec), 0.0);
     vec4 dirLightSpecularColor = dirLightColor * u_specularColor * max(sign(dotDirLightDirNormalVec),0.0);
-    vec4 dirLightSpecularToon = max(sign(dotReflectionDirEyeDir - u_sToonTh), 0.0) * dirLightSpecularColor;
+    //vec4 dirLightSpecularToon = max(sign(dotReflectionDirEyeDir - u_sToonTh), 0.0) * dirLightSpecularColor;
+    vec4 dirLightSpecularToon = pow(dotReflectionDirEyeDir, 0.8) * dirLightSpecularColor;
 
     //ambient color
-    vec4 ambientColorResult = u_ambientColor * ambientColor;
+    vec4 ambientColorResult = u_ambientLight * ambientColor;
 
     outColor = vec4(clamp(ambientColorResult +
                             pointLightDiffuseToonColor + 
                             dirLightDiffuseToonColor +
                             pointLightSpecularToon +
-                            dirLightSpecularToon, 0.0, 1.0)); 
+                            dirLightSpecularToon, 0.0, 1.0));
+    //outColor = vec4(clamp(dirLightDiffuseToonColor, 0.0, 1.0));
 }
