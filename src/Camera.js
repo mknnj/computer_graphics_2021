@@ -66,7 +66,7 @@ export class Camera {
 
     updateProjection(){
         var aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
-        this.projectionMatrix = utils.MakePerspective(30, aspect, 1, 2000);
+        this.projectionMatrix = utils.MakePerspective(30, aspect, 0.01, 2000);
     }
 
     updateMatrices(){
