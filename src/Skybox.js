@@ -11,7 +11,6 @@ export class Skybox {
         this.viewDirectionProjectionInverseLocation;
         this.positionBuffer = this.gl.createBuffer();
         this.textureInfo;
-        this.textureDict = {};
 
         this.setUp();
         this.setGeometry();
@@ -41,7 +40,6 @@ export class Skybox {
 
     async loadSkybox(textureInfoPath){
         this.textureInfo = await this.readJson(textureInfoPath);
-        this.textureInfo.skybox.forEach(x => { this.textureDict[x.name] = x.path; });
          // Create a texture.
         var texture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
@@ -49,27 +47,27 @@ export class Skybox {
         const faceInfos = [
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-            url: this.textureDict["right"],
+            url: this.textureInfo.skybox.right
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-            url: this.textureDict["left"],
+            url: this.textureInfo.skybox.left
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-            url: this.textureDict["up"],
+            url: this.textureInfo.skybox.up
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            url: this.textureDict["down"],
+            url: this.textureInfo.skybox.down
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-            url: this.textureDict["front"],
+            url: this.textureInfo.skybox.front
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            url: this.textureDict["back"],
+            url: this.textureInfo.skybox.back
         },
         ];
         faceInfos.forEach((faceInfo) => {

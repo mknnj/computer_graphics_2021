@@ -580,6 +580,22 @@ createProgram:function(gl, vertexShader, fragmentShader) {
     dst[2] = a[2] - b[2];
     return dst;
   },
+
+  	addVectors:function(a, b, dst) {
+    dst = dst || new Float32Array(3);
+    dst[0] = a[0] + b[0];
+    dst[1] = a[1] + b[1];
+    dst[2] = a[2] + b[2];
+    return dst;
+  },
+
+  	multiplyScalarVector:function(a, b, dst) {
+    dst = dst || new Float32Array(3);
+    dst[0] = a[0] * b;
+    dst[1] = a[1] * b;
+    dst[2] = a[2] * b;
+    return dst;
+  },
     
       copy:function(src, dst) {
     dst = dst || new Float32Array(16);

@@ -1,0 +1,17 @@
+{
+    "lights" : {
+        "ambient" : {
+            "color": [1, 1, 1, 1]
+        },
+        "directionalLight" : {
+            "color" : [1, 1, 1, 1],
+            "direction" : [1, 1, 0]
+        },
+        "pointLight" : {
+            "color" : [1, 1, 1, 1],
+            "position" : [0, 0.3, 0, 1],
+            "decay": 0.5,
+            "target": 0.5
+        }
+    }
+}

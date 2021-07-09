@@ -23,6 +23,22 @@ export class Camera {
         this.updateProjection();
     }
 
+    getViewDirection(){
+        //We need to go through the transformation pipeline in the inverse order so we invert the matrices
+        var projInv = utils.invertMatrix(this.projectionMatrix);
+        var viewInv = utils.invertMatrix(this.viewMat);
+        
+        var pointEyeCoords = utils.multiplyMatrixVector(projInv, [0, 0, -1, 1]);
+    
+        var rayEyeCoords = [pointEyeCoords[0], pointEyeCoords[1], pointEyeCoords[2], 0];
+
+        var rayDir = utils.multiplyMatrixVector(viewInv, rayEyeCoords);
+
+        var normalisedRayDir = utils.normalize(rayDir);
+        
+        return normalisedRayDir;
+    }
+
     getViewMatrix(){
         this.viewMat = utils.MakeView(this.pos[0], this.pos[1], this.pos[2], this.elev, this.ang);
         return this.viewMat;

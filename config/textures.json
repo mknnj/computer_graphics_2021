@@ -1,34 +1,27 @@
 { 
-    "skybox":[
+    "skybox":
     {
-        "name": "right",
-        "path": "assets/skybox/night/right.jpg"
+        "right": "assets/skybox/night/right.jpg",
+        "left": "assets/skybox/night/left.jpg",
+        "up": "assets/skybox/night/up.jpg",
+        "down": "assets/skybox/night/down.jpg",
+        "front": "assets/skybox/night/front.jpg",
+        "back": "assets/skybox/night/back.jpg"
     },
-    {
-        "name": "left",
-        "path": "assets/skybox/night/left.jpg"
-    },
-    {
-        "name": "up",
-        "path": "assets/skybox/night/up.jpg"
-    },
-    {
-        "name": "down",
-        "path": "assets/skybox/night/down.jpg"
-    },
-    {
-        "name": "front",
-        "path": "assets/skybox/night/front.jpg"
-    },
-    {
-        "name": "back",
-        "path": "assets/skybox/night/back.jpg" 
-    }
-    ],
     "parameters":
     {
         "level": 0,
         "width": 1024,
         "height": 1024
+    },
+    "textures":
+    {
+        "cloud": "/assets/Terrain-Texture_2.png",
+        "cylinder": "/assets/Terrain-Texture_2.png",
+        "hedge": "/assets/Terrain-Texture_2.png",
+        "mountain": "/assets/Terrain-Texture_2.png",
+        "rock": "/assets/Terrain-Texture_2.png",
+        "square": "/assets/Terrain-Texture_2.png",
+        "tree": "/assets/Terrain-Texture_2.png"
     }
 }

@@ -1,0 +1,14 @@
+{
+    "mesh":
+    {
+        "brick": "/assets/brick.obj",
+        "cloud": "/assets/cloud.obj",
+        "cylinder": "/assets/cylinderIsland.obj",
+        "ghost": "/assets/ghost.obj",
+        "hedge": "/assets/hedge.obj",
+        "mountain": "/assets/mountain.obj",
+        "rock": "/assets/rock.obj",
+        "square": "/assets/squareIsland.obj",
+        "tree": "/assets/tree.obj"
+    }
+}

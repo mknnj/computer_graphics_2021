@@ -36,11 +36,11 @@ void main() {
     vec3 normalizedNormal = normalize(v_normal);
 
     //handle texture color
-    /*vec4 textureColor = texture(u_texture, v_uv);
+    vec4 textureColor = texture(u_texture, v_uv);
     vec4 diffuseColor = u_diffuseColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;
-    vec4 ambientColor = u_ambientMatColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;*/
-    vec4 diffuseColor = u_diffuseColor;
-    vec4 ambientColor = u_ambientMatColor;
+    vec4 ambientColor = u_ambientMatColor * (1.0 - u_isTexturePresent) + textureColor * u_isTexturePresent;
+    //vec4 diffuseColor = u_diffuseColor;
+    //vec4 ambientColor = u_ambientMatColor;
 
 
     //point light

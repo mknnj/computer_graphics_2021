@@ -91,8 +91,15 @@ export class Drawable {
         
         //texture uniform
         this.gl.uniform1i(this.textureLocation, 0);
-        if(this.texture === null) this.gl.uniform1f(this.textureBoolLocation, 0.0);
-        else this.gl.uniform1f(this.textureBoolLocation, 1.0);
+        if(this.texture === null) 
+            {
+            this.gl.uniform1f(this.textureBoolLocation, 0.0);
+        } else {
+            this.gl.uniform1f(this.textureBoolLocation, 1.0);
+            this.gl.activeTexture(this.gl.TEXTURE0);
+            // Bind the texture to texture unit 0
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        }
 
         //lights uniform
         this.gl.uniform3fv(this.eyePositionLocation, camera.pos);
