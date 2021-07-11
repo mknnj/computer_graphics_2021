@@ -15,8 +15,8 @@ uniform vec3 u_eyePos; //eye position is camera position
 uniform vec4 u_diffuseColor; //material diffuse color
 uniform vec4 u_specularColor; //material specular color
 uniform vec4 u_ambientMatColor; //material ambient color
-uniform float u_dToonTh; //toon shading threshold for diffuse component
-uniform float u_sToonTh; //toon shading threshold for specular component
+uniform float u_blinnGamma; //gamma parameter for blinn reflection
+uniform float u_alpha; //alpha of final color
 
 //point light
 uniform vec4 u_pointLightColor; //point light color 
@@ -72,7 +72,7 @@ void main() {
     float dotReflectionDirEyeDir = max(dot(reflectionDirLight, normalizedEyeDirVec), 0.0);
     vec4 dirLightSpecularColor = dirLightColor * u_specularColor * max(sign(dotDirLightDirNormalVec),0.0);
     //vec4 dirLightSpecularToon = max(sign(dotReflectionDirEyeDir - u_sToonTh), 0.0) * dirLightSpecularColor;
-    vec4 dirLightSpecularToon = pow(dotReflectionDirEyeDir, 0.8) * dirLightSpecularColor;
+    vec4 dirLightSpecularToon = pow(dotReflectionDirEyeDir, u_blinnGamma) * dirLightSpecularColor;
 
     //ambient color
     vec4 ambientColorResult = u_ambientLight * ambientColor;
@@ -81,6 +81,6 @@ void main() {
                             pointLightDiffuseToonColor + 
                             dirLightDiffuseToonColor +
                             pointLightSpecularToon +
-                            dirLightSpecularToon, 0.0, 1.0));
+                            dirLightSpecularToon, 0.0, 1.0).xyz, u_alpha);
     //outColor = vec4(clamp(dirLightDiffuseToonColor, 0.0, 1.0));
 }

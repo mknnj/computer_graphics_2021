@@ -1,13 +1,23 @@
 { 
-    "skybox":
-    {
-        "right": "assets/skybox/night/right.jpg",
-        "left": "assets/skybox/night/left.jpg",
-        "up": "assets/skybox/night/up.jpg",
-        "down": "assets/skybox/night/down.jpg",
-        "front": "assets/skybox/night/front.jpg",
-        "back": "assets/skybox/night/back.jpg"
-    },
+    "skybox":[
+        {
+            "right": "assets/skybox/night/right.jpg",
+            "left": "assets/skybox/night/left.jpg",
+            "up": "assets/skybox/night/up.jpg",
+            "down": "assets/skybox/night/down.jpg",
+            "front": "assets/skybox/night/front.jpg",
+            "back": "assets/skybox/night/back.jpg"
+        },
+        {
+            "right": "assets/skybox/cloudy/right.jpg",
+            "left": "assets/skybox/cloudy/left.jpg",
+            "up": "assets/skybox/cloudy/up.jpg",
+            "down": "assets/skybox/cloudy/down.jpg",
+            "front": "assets/skybox/cloudy/front.jpg",
+            "back": "assets/skybox/cloudy/back.jpg"
+        }
+
+    ],
     "parameters":
     {
         "level": 0,

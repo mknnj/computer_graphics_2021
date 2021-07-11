@@ -7,6 +7,7 @@ export class Drawable {
         this.rotation = rotation;
         this.scale = scale;
         this.texture = texture;
+        this.alpha = 1.0;
 
         this.gl = gl;
         this.jsonObj = jsonObj;
@@ -38,8 +39,8 @@ export class Drawable {
         this.diffuseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[6]);
         this.specularLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[7]);
         this.ambientMatColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
-        this.diffuseToonThLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
-        this.specularToonThLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
+        this.blinnGammaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
+        this.alphaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
         this.pointLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[11]);
         this.pointLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[12]);
         this.pointLightTargetLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[13]);
@@ -65,6 +66,10 @@ export class Drawable {
         this.worldMatrix = utils.MakeWorld(this.position[0], this.position[1], this.position[2],
                                     this.rotation[0], this.rotation[1], this.rotation[2],
                                     this.scale);
+    }
+
+    updateAlpha(alpha){ // final transparency of object
+        this.alpha = alpha;
     }
 
     draw(camera, lights){
@@ -106,8 +111,8 @@ export class Drawable {
         this.gl.uniform4fv(this.diffuseLocation, this.mesh.material.diffuse);
         this.gl.uniform4fv(this.specularLocation, this.mesh.material.specular);
         this.gl.uniform4fv(this.ambientMatColorLocation, this.mesh.material.ambient);
-        this.gl.uniform1f(this.diffuseToonThLocation, this.mesh.material.diffuseTh);
-        this.gl.uniform1f(this.specularToonThLocation, this.mesh.material.specularTh);
+        this.gl.uniform1f(this.blinnGammaLocation, this.mesh.material.blinnGamma);
+        this.gl.uniform1f(this.alphaLocation, this.alpha);
         this.gl.uniform4fv(this.pointLightColorLocation, lights.pointLight.color);
         this.gl.uniform3fv(this.pointLightLocation, utils.multiplyMatrixVector(camera.viewMat, lights.pointLight.position).slice(0,3));
         this.gl.uniform1f(this.pointLightTargetLocation, lights.pointLight.target);

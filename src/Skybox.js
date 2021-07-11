@@ -11,6 +11,7 @@ export class Skybox {
         this.viewDirectionProjectionInverseLocation;
         this.positionBuffer = this.gl.createBuffer();
         this.textureInfo;
+        this.currentSkyboxIndex = 0;
 
         this.setUp();
         this.setGeometry();
@@ -38,8 +39,11 @@ export class Skybox {
           this.gl.bufferData(this.gl.ARRAY_BUFFER, positions, this.gl.STATIC_DRAW);
     }
 
-    async loadSkybox(textureInfoPath){
+    async loadSkyboxInfo(textureInfoPath){
         this.textureInfo = await this.readJson(textureInfoPath);
+    }
+
+    loadSkybox(){
          // Create a texture.
         var texture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
@@ -47,27 +51,27 @@ export class Skybox {
         const faceInfos = [
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-            url: this.textureInfo.skybox.right
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].right
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-            url: this.textureInfo.skybox.left
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].left
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-            url: this.textureInfo.skybox.up
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].up
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            url: this.textureInfo.skybox.down
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].down
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-            url: this.textureInfo.skybox.front
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].front
         },
         {
             target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            url: this.textureInfo.skybox.back
+            url: this.textureInfo.skybox[this.currentSkyboxIndex].back
         },
         ];
         faceInfos.forEach((faceInfo) => {
@@ -140,5 +144,15 @@ export class Skybox {
 
         // Draw the geometry.
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 1 * 6);
+    }
+
+    nextSkybox(){
+        this.currentSkyboxIndex = this.currentSkyboxIndex+1 >= this.textureInfo.skybox.length ? 0 : this.currentSkyboxIndex+1;
+        this.loadSkybox();
+    }
+
+    prevSkybox(){
+        this.currentSkyboxIndex = this.currentSkyboxIndex-1 >=0 ? this.currentSkyboxIndex-1 : this.textureInfo.skybox.length-1;
+        this.loadSkybox();
     }
 }

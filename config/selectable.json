@@ -1,0 +1,60 @@
+{
+    "selectable" : [
+        {
+            "program" : "main",
+            "mesh" : "brick",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.01,
+            "texture" : null
+        },
+        {
+            "program" : "main",
+            "mesh" : "cloud",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.05,
+            "texture" : "cloud"
+        },
+        {
+            "program" : "main",
+            "mesh" : "cylinder",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.03,
+            "texture" : "cylinder"
+        },
+        {
+            "program" : "main",
+            "mesh" : "hedge",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.05,
+            "texture" : "hedge"
+        },
+        {
+            "program" : "main",
+            "mesh" : "mountain",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.1,
+            "texture" : "mountain"
+        },
+        {
+            "program" : "main",
+            "mesh" : "rock",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.04,
+            "texture" : "rock"
+        },
+        {
+            "program" : "main",
+            "mesh" : "square",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.03,
+            "texture" : "square"
+        },
+        {
+            "program" : "main",
+            "mesh" : "tree",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.05,
+            "texture" : "tree"
+        }
+    ]
+}

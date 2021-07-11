@@ -1,65 +1,56 @@
 {
     "brick" : {
-    "diffuse": [0.6, 0, 0, 1],
-    "ambient": [0.2, 0, 0, 1],
-    "specular": [0.2, 0.2, 0.2, 1],
-    "diffuseTh": 0.5,
-    "specularTh": 0.5
+        "diffuse": [0.6, 0, 0, 1],
+        "ambient": [0.2, 0, 0, 1],
+        "specular": [0.2, 0.2, 0.2, 1],
+        "blinnGamma": 0.1
     },
     "cloud" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "cylinder" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "ghost" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "hedge" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "mountain" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "rock" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "square" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     },
     "tree" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "diffuseTh": 0.5,
-        "specularTh": 0.5
+        "blinnGamma": 0.8
     }
 }

@@ -39,6 +39,11 @@ export class Camera {
         return normalisedRayDir;
     }
 
+    getDestination(distance){
+        var direction = this.getViewDirection();
+        return utils.addVectors(this.pos, utils.multiplyScalarVector(direction, distance));
+    }
+
     getViewMatrix(){
         this.viewMat = utils.MakeView(this.pos[0], this.pos[1], this.pos[2], this.elev, this.ang);
         return this.viewMat;
