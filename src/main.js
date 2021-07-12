@@ -56,8 +56,6 @@ function drawScene(time){
     clearBits();
     skybox.draw(scene.camera);
     scene.draw();
-    //plane.draw(camera, lights);
-    
     requestAnimationFrame(drawScene);
 }
 

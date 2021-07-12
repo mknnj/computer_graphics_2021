@@ -124,7 +124,7 @@ export class SceneHandler{
         }
         else{
             if(this.selectedToDelete!=-1)
-                this.objects[this.selectedToDelete].updateAlpha((Math.cos(this.time/50)+1.1)/2);
+                this.objects[this.selectedToDelete].updateAlpha((Math.cos(this.time/200)+1.1)/2);
         }
     }
 
@@ -135,8 +135,7 @@ export class SceneHandler{
             var minT = 200000;
             for(let i = 0; i<this.objects.length;i++){
                 let distanceFromObj = this.objects[i].collider.isCollidingWithRay(this.camera.getViewDirection(), this.camera.pos);
-                //console.log(this.objects[i].mesh);
-                if(this.objects[i].mesh.meshName !== "plane" && distanceFromObj != null &&  distanceFromObj<minT){
+                if(this.objects[i].meshName !== "plane" && distanceFromObj != null &&  distanceFromObj<minT){
                     minT = distanceFromObj;
                     this.selectedToDelete = i;
                 }
