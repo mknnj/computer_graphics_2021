@@ -14,6 +14,8 @@ export class SceneHandler{
         this.selected = null;
         this.selectable = [];
         this.currentSelectedIndex = 0;
+        this.selectedToDelete = -1;
+        this.guiElements = [];
     }
 
     async load(url){
@@ -50,7 +52,7 @@ export class SceneHandler{
                 "texture" : x.textureName
             });
         });
-        return dump
+        return dump;
     }
 
     save(filename){
@@ -76,6 +78,11 @@ export class SceneHandler{
         this.objects.forEach((x)=>x.draw(this.camera, this.lights));
         if (this.selected != null)
             this.selected.draw(this.camera, this.lights);
+        else this.guiElements.forEach((x)=>x.draw());
+    }
+
+    resizeGui(){
+        this.guiElements.forEach((x)=>x.resize());
     }
 
     toggleSelected(){
@@ -109,10 +116,33 @@ export class SceneHandler{
     }
 
     update(){
+        this.updateSceneFocus();
         if (this.selected != null){
             this.selected.position = this.camera.getDestination(3);
             this.selected.updateWorld();
             this.selected.updateAlpha((Math.cos(this.time/500)+1.1)/2);
+        }
+        else{
+            if(this.selectedToDelete!=-1)
+                this.objects[this.selectedToDelete].updateAlpha((Math.cos(this.time/50)+1.1)/2);
+        }
+    }
+
+    updateSceneFocus(){
+        if(this.selected == null && this.camera!=null){
+            var lastSelected = this.selectedToDelete;
+            this.selectedToDelete = -1;
+            var minT = 200000;
+            for(let i = 0; i<this.objects.length;i++){
+                let distanceFromObj = this.objects[i].collider.isCollidingWithRay(this.camera.getViewDirection(), this.camera.pos);
+                //console.log(this.objects[i].mesh);
+                if(this.objects[i].mesh.meshName !== "plane" && distanceFromObj != null &&  distanceFromObj<minT){
+                    minT = distanceFromObj;
+                    this.selectedToDelete = i;
+                }
+            }
+            if(this.selectedToDelete != lastSelected && lastSelected!=-1)
+                this.objects[lastSelected].updateAlpha(1);
         }
     }
 
@@ -139,7 +169,6 @@ export class SceneHandler{
         for (const [key, value] of Object.entries(meshDict)) {
             this.meshDict[key] = await ObjParser.parseObjFile(value);
             this.meshDict[key].boundaries = this.computeBoundaries(this.meshDict[key]);
-            console.log(this.meshDict[key]);
         }
 
     }
@@ -152,10 +181,15 @@ export class SceneHandler{
         let maxZ = Math.max(...mesh.vertices.filter((e,i) => i%3 == 2));
         let minZ = Math.min(...mesh.vertices.filter((e,i) => i%3 == 2));
 
-        return [maxX, minX, maxY, minY, maxZ, minZ];
+        return [maxX, maxY, maxZ, minX, minY, minZ];
     }
 
-
+    deleteFocusedItem(){
+        if (this.selected == null && this.selectedToDelete!=-1){
+            this.objects.splice(this.selectedToDelete, 1);
+            this.selectedToDelete = -1;
+        }
+    }
 
     async loadSelectableObjectsInfo(url){
         this.selectable = (await this.readJson(url)).selectable;

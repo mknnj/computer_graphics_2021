@@ -32,6 +32,7 @@
         "mountain": "/assets/Terrain-Texture_2.png",
         "rock": "/assets/Terrain-Texture_2.png",
         "square": "/assets/Terrain-Texture_2.png",
-        "tree": "/assets/Terrain-Texture_2.png"
+        "tree": "/assets/Terrain-Texture_2.png",
+        "scope" : "/assets/scope.png"
     }
 }

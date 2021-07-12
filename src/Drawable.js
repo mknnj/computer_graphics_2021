@@ -9,6 +9,7 @@ export class Drawable {
         this.scale = scale;
         this.texture = texture;
         this.alpha = 1.0;
+        this.collider = new Collider(this);
 
         this.gl = gl;
         this.jsonObj = jsonObj;
@@ -21,9 +22,9 @@ export class Drawable {
         this.normalBuffer = this.gl.createBuffer();
         this.uvBuffer = this.gl.createBuffer();
         this.indexBuffer = this.gl.createBuffer();
+        
         this.setUp();
         this.updateWorld();
-        this.collider = new Collider(this);
     }
 
     setUp(){

@@ -3,6 +3,7 @@ import { ShadersHandler } from "./ShadersHandler.js";
 import { Skybox } from "./Skybox.js";
 import { TextureHandler } from "./TextureHandler.js";
 import { SceneHandler } from "./SceneHandler.js";
+import { GuiElement } from "./GuiElement.js";
 
 var scene;
 var canvas;
@@ -34,6 +35,14 @@ async function main() {
     await scene.loadTextures("/config/textures.json");
     await scene.load("/assets/scenes/scene1.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
+
+    scene.guiElements.push(new GuiElement(sh.getProgram("gui"),
+                                            sh.getJson("gui"),
+                                            gl,
+                                            [0,0],
+                                            0.1, 0.1,
+                                            [1, 0, 0, 0],
+                                            scene.texturesDict["scope"]));
     
     drawScene();
 }
@@ -86,7 +95,13 @@ function lockChange(){
 }
 
 function updateCameraProjection(){
+    //setViewportAndCanvas();
+    //scene.resizeGui();
     if(scene.camera != null) scene.camera.updateProjection();
+}
+
+function deleteFocusedItem(){
+    if(scene != null) scene.deleteFocusedItem();
 }
 
 function handleKeyPressed(e){
@@ -111,6 +126,7 @@ function placeSelectedItem(e){
 addEventListener("mousemove", updateCameraAngle, false);
 addEventListener("mousedown", lockChange, false);
 addEventListener("mouseup", placeSelectedItem, false);
+addEventListener("mouseup", deleteFocusedItem, false);
 addEventListener("keydown", activateCameraMovement, false);
 addEventListener("keyup", handleKeyPressed, false);
 addEventListener("keyup", deactivateCameraMovement, false);

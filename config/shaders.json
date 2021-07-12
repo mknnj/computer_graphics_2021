@@ -25,6 +25,13 @@
              "u_blinnGamma", "u_alpha",
              "u_pointLightColor", "u_pointLightPosition","u_pointLightTarget","u_pointLightDecay",
              "u_dirLightDirection", "u_dirLightColor", "u_ambientLight"]
+    },
+    {
+        "name": "gui",
+        "vertexShader": "vs_gui.glsl",
+        "fragmentShader": "fs_gui.glsl",
+        "attribNames": ["a_position", "a_uv"],
+        "uniformNames": ["u_texture", "u_isTexturePresent", "u_color"]
     }
     ]
 }
