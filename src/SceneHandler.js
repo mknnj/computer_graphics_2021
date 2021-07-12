@@ -117,11 +117,10 @@ export class SceneHandler{
     }
 
     placeSelected(){
-        if (this.selected != null){
+        if (this.selected != null && !this.selected.collider.isColliding(this.objects)){
             this.selected.updateAlpha(1);
             this.objects.push(this.selected);
             this.instantiateSelected();
-            //this.selected = null;
         }
     }
 
@@ -139,8 +138,24 @@ export class SceneHandler{
 
         for (const [key, value] of Object.entries(meshDict)) {
             this.meshDict[key] = await ObjParser.parseObjFile(value);
+            this.meshDict[key].boundaries = this.computeBoundaries(this.meshDict[key]);
+            console.log(this.meshDict[key]);
         }
+
     }
+
+    computeBoundaries(mesh){
+        let maxX = Math.max(...mesh.vertices.filter((e,i) => i%3 == 0));
+        let minX = Math.min(...mesh.vertices.filter((e,i) => i%3 == 0));
+        let maxY = Math.max(...mesh.vertices.filter((e,i) => i%3 == 1));
+        let minY = Math.min(...mesh.vertices.filter((e,i) => i%3 == 1));
+        let maxZ = Math.max(...mesh.vertices.filter((e,i) => i%3 == 2));
+        let minZ = Math.min(...mesh.vertices.filter((e,i) => i%3 == 2));
+
+        return [maxX, minX, maxY, minY, maxZ, minZ];
+    }
+
+
 
     async loadSelectableObjectsInfo(url){
         this.selectable = (await this.readJson(url)).selectable;

@@ -9,6 +9,7 @@
         "mountain": "/assets/mountain.obj",
         "rock": "/assets/rock.obj",
         "square": "/assets/squareIsland.obj",
-        "tree": "/assets/tree.obj"
+        "tree": "/assets/tree.obj",
+        "plane": "/assets/plane.obj"
     }
 }

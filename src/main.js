@@ -35,18 +35,6 @@ async function main() {
     await scene.load("/assets/scenes/scene1.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
     
-
-    var planeMesh = {
-        vertices : [500.0, 0.0, 500.0,
-                    500.0, 0.0, -500.0,
-                    -500.0, 0.0, -500.0,
-                    -500.0, 0.0, 500.0],
-        vertexNormals : [0.0, 1.0, 0.0,
-                    0.0, 1.0, 0.0,
-                    0.0, 1.0, 0.0,
-                    0.0, 1.0, 0.0],
-        indices : [0,1,2,3,0,2]
-    }
     drawScene();
 }
 

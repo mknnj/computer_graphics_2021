@@ -1,4 +1,5 @@
 import {utils} from "./utils.js";
+import { Collider } from "./Collider.js";
 
 export class Drawable {
     constructor(program, jsonObj, gl, mesh, position, rotation, scale, texture = null){
@@ -22,6 +23,7 @@ export class Drawable {
         this.indexBuffer = this.gl.createBuffer();
         this.setUp();
         this.updateWorld();
+        this.collider = new Collider(this);
     }
 
     setUp(){
@@ -66,6 +68,7 @@ export class Drawable {
         this.worldMatrix = utils.MakeWorld(this.position[0], this.position[1], this.position[2],
                                     this.rotation[0], this.rotation[1], this.rotation[2],
                                     this.scale);
+        this.collider.updateCollider();
     }
 
     updateAlpha(alpha){ // final transparency of object

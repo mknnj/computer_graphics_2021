@@ -52,5 +52,11 @@
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
         "blinnGamma": 0.8
+    },
+    "plane" : {
+        "diffuse": [0.1, 0.1, 0.1, 1],
+        "ambient": [0.0, 0.0, 0.0, 1],
+        "specular": [0.1, 0.1, 0.1, 1],
+        "blinnGamma": 0.5
     }
 }
