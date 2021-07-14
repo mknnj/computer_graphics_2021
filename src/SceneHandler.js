@@ -16,6 +16,9 @@ export class SceneHandler{
         this.currentSelectedIndex = 0;
         this.selectedToDelete = -1;
         this.guiElements = [];
+        this.isPlacing = false;
+        this.isSpawnPresent = false;
+        this.isGoalPresent = false;
     }
 
     async load(url){
@@ -23,21 +26,38 @@ export class SceneHandler{
         await utils.loadFiles([url], (sceneInfoData) => {
             sceneInfo = JSON.parse(sceneInfoData);
         });
-        sceneInfo.objects.forEach((x) => {
-            let toAdd = new Drawable(
-                this.shaderHandler.getProgram(x.program),
-                this.shaderHandler.getJson(x.program),
-                this.gl,
-                this.meshDict[x.mesh],
-                x.position,
-                x.rotation,
-                x.scale,
-                this.getTexture(x.texture)
-            );
-            this.objects.push(toAdd);
-            toAdd.meshName = x.mesh;
-            toAdd.textureName = x.texture;
-            });
+        try {
+            sceneInfo.objects.forEach((x) => {
+                let toAdd = new Drawable(
+                    this.shaderHandler.getProgram(x.program),
+                    this.shaderHandler.getJson(x.program),
+                    this.gl,
+                    this.meshDict[x.mesh],
+                    this.materialDict[x.name],
+                    x.name,
+                    x.position,
+                    x.rotation,
+                    x.scale,
+                    this.getTexture(x.texture)
+                );
+                this.objects.push(toAdd);
+                toAdd.meshName = x.mesh;
+                toAdd.textureName = x.texture;
+                if (x.name === "spawnBrick") {
+                    if (this.isSpawnPresent) throw new Error("CORRUPTED SCENE \nLOADING EMPTY SCENE");
+                    else this.isSpawnPresent = true;
+                }
+                else if (x.name === "goalBrick") {
+                    if (this.isGoalPresent) throw new Error("CORRUPTED SCENE \nLOADING EMPTY SCENE");
+                    else this.isGoalPresent = true;
+                }
+                });
+        } catch(error){
+            alert(error);
+            this.objects = [];
+            this.isSpawnPresent = false;
+            this.isGoalPresent = false;
+        }
     }
 
     sceneToJSON(){
@@ -86,6 +106,10 @@ export class SceneHandler{
     }
 
     toggleSelected(){
+        if (this.selectedToDelete != -1){
+            this.objects[this.selectedToDelete].updateAlpha(1);
+            this.selectedToDelete = -1;
+        }
         if (this.selected == null)
             this.instantiateSelected();
         else this.selected = null;
@@ -93,11 +117,19 @@ export class SceneHandler{
 
     nextSelected(){
         this.currentSelectedIndex = this.currentSelectedIndex + 1 < this.selectable.length ? this.currentSelectedIndex + 1 : 0;
+        if (this.selectedToDelete != -1){
+            this.objects[this.selectedToDelete].updateAlpha(1);
+            this.selectedToDelete = -1;
+        }
         this.instantiateSelected();
     }
 
     prevSelected(){
         this.currentSelectedIndex = this.currentSelectedIndex > 0 ? this.currentSelectedIndex - 1 : this.selectable.length - 1;
+        if (this.selectedToDelete != -1){
+            this.objects[this.selectedToDelete].updateAlpha(1);
+            this.selectedToDelete = -1;
+        }
         this.instantiateSelected();
     }
 
@@ -108,6 +140,8 @@ export class SceneHandler{
             this.shaderHandler.getJson(this.selectable[this.currentSelectedIndex].program), 
             this.gl, 
             this.meshDict[this.selectable[this.currentSelectedIndex].mesh], 
+            this.materialDict[this.selectable[this.currentSelectedIndex].name],
+            this.selectable[this.currentSelectedIndex].name,
             this.camera.getDestination(3), 
             this.selectable[this.currentSelectedIndex].rotation, 
             this.selectable[this.currentSelectedIndex].scale, 
@@ -126,6 +160,7 @@ export class SceneHandler{
             if(this.selectedToDelete!=-1)
                 this.objects[this.selectedToDelete].updateAlpha((Math.cos(this.time/200)+1.1)/2);
         }
+        this.placeSelected();
     }
 
     updateSceneFocus(){
@@ -146,10 +181,16 @@ export class SceneHandler{
     }
 
     placeSelected(){
-        if (this.selected != null && !this.selected.collider.isColliding(this.objects)){
-            this.selected.updateAlpha(1);
-            this.objects.push(this.selected);
-            this.instantiateSelected();
+        if (this.selected != null){
+            if (this.selected.name === "spawnBrick" && this.isSpawnPresent) return;
+            if (this.selected.name === "goalBrick" && this.isGoalPresent) return;
+            if (this.isPlacing && !this.selected.collider.isColliding(this.objects)){
+                this.selected.updateAlpha(1);
+                this.objects.push(this.selected);
+                if (this.selected.name === "spawnBrick") this.isSpawnPresent = true;
+                else if (this.selected.name === "goalBrick") this.isGoalPresent = true;
+                this.instantiateSelected();
+            }
         }
     }
 
@@ -185,6 +226,8 @@ export class SceneHandler{
 
     deleteFocusedItem(){
         if (this.selected == null && this.selectedToDelete!=-1){
+            if (this.objects[this.selectedToDelete].name === "spawnBrick") this.isSpawnPresent = false;
+            else if (this.objects[this.selectedToDelete].name === "goalBrick") this.isGoalPresent = false;
             this.objects.splice(this.selectedToDelete, 1);
             this.selectedToDelete = -1;
         }
@@ -195,11 +238,7 @@ export class SceneHandler{
     }
 
     async loadMaterials(url){
-        var materialDict = (await this.readJson(url));
-
-        for (const [key, value] of Object.entries(materialDict)) {
-            this.meshDict[key].material = value;
-        }
+        this.materialDict = (await this.readJson(url));
     }
 
     async loadLights(url){

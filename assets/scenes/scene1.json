@@ -1,6 +1,7 @@
 {
     "objects":[
         {
+            "name": "brick",
             "program" : "main",
             "mesh" : "brick",
             "position" : [0, 1.2, 0],
@@ -9,6 +10,7 @@
             "texture" : null
         },
         {
+            "name": "rock",
             "program" : "main",
             "mesh" : "rock",
             "position" : [0, 1, -10],
@@ -17,6 +19,7 @@
             "texture" : "rock"
         },
         {
+            "name": "hedge",
             "program" : "main",
             "mesh" : "hedge",
             "position" : [0, 1, -16],
@@ -25,6 +28,7 @@
             "texture" : "hedge"
         },
         {
+            "name": "plane",
             "program" : "main",
             "mesh" : "plane",
             "position" : [0, -5, 0],

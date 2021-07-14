@@ -1,7 +1,7 @@
 import {utils} from "./utils.js";
 
-const RSPE = .1;
-const MSPE = .1;
+const RSPE = .08;
+const MSPE = .08;
 
 export class Camera {
     constructor(gl){

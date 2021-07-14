@@ -1,12 +1,22 @@
 {
     "objects":[
         {
+            "name": "spawnBrick",
             "program" : "main",
-            "mesh" : "rock",
-            "position" : [0, 1, -10],
+            "mesh" : "brick",
+            "position" : [0, 1.2, -5],
             "rotation" : [0, 0, 0],
-            "scale" : 0.035,
-            "texture" : "rock"
+            "scale" : 0.01,
+            "texture" : null
+        },
+        {
+            "name": "goalBrick",
+            "program" : "main",
+            "mesh" : "brick",
+            "position" : [1, 1.2, 0],
+            "rotation" : [0, 0, 0],
+            "scale" : 0.01,
+            "texture" : null
         }
     ]
 }

@@ -1,6 +1,7 @@
 {
     "selectable" : [
         {
+            "name": "spawnBrick",
             "program" : "main",
             "mesh" : "brick",
             "rotation" : [0, 0, 0],
@@ -8,6 +9,23 @@
             "texture" : null
         },
         {
+            "name": "goalBrick",
+            "program" : "main",
+            "mesh" : "brick",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.01,
+            "texture" : null
+        },
+        {
+            "name": "brick",
+            "program" : "main",
+            "mesh" : "brick",
+            "rotation" : [0, 0, 0],
+            "scale" : 0.01,
+            "texture" : null
+        },
+        {
+            "name": "cloud",
             "program" : "main",
             "mesh" : "cloud",
             "rotation" : [0, 0, 0],
@@ -15,6 +33,7 @@
             "texture" : "cloud"
         },
         {
+            "name": "cylinder",
             "program" : "main",
             "mesh" : "cylinder",
             "rotation" : [0, 0, 0],
@@ -22,6 +41,7 @@
             "texture" : "cylinder"
         },
         {
+            "name": "hedge",
             "program" : "main",
             "mesh" : "hedge",
             "rotation" : [0, 0, 0],
@@ -29,6 +49,7 @@
             "texture" : "hedge"
         },
         {
+            "name": "mountain",
             "program" : "main",
             "mesh" : "mountain",
             "rotation" : [0, 0, 0],
@@ -36,6 +57,7 @@
             "texture" : "mountain"
         },
         {
+            "name": "rock",
             "program" : "main",
             "mesh" : "rock",
             "rotation" : [0, 0, 0],
@@ -43,6 +65,7 @@
             "texture" : "rock"
         },
         {
+            "name": "square",
             "program" : "main",
             "mesh" : "square",
             "rotation" : [0, 0, 0],
@@ -50,6 +73,7 @@
             "texture" : "square"
         },
         {
+            "name": "tree",
             "program" : "main",
             "mesh" : "tree",
             "rotation" : [0, 0, 0],

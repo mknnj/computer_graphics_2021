@@ -2,8 +2,10 @@ import {utils} from "./utils.js";
 import { Collider } from "./Collider.js";
 
 export class Drawable {
-    constructor(program, jsonObj, gl, mesh, position, rotation, scale, texture = null){
+    constructor(program, jsonObj, gl, mesh, material, name, position, rotation, scale, texture = null){
         this.mesh = mesh;
+        this.material = material;
+        this.name = name;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
@@ -112,10 +114,10 @@ export class Drawable {
 
         //lights uniform
         this.gl.uniform3fv(this.eyePositionLocation, camera.pos);
-        this.gl.uniform4fv(this.diffuseLocation, this.mesh.material.diffuse);
-        this.gl.uniform4fv(this.specularLocation, this.mesh.material.specular);
-        this.gl.uniform4fv(this.ambientMatColorLocation, this.mesh.material.ambient);
-        this.gl.uniform1f(this.blinnGammaLocation, this.mesh.material.blinnGamma);
+        this.gl.uniform4fv(this.diffuseLocation, this.material.diffuse);
+        this.gl.uniform4fv(this.specularLocation, this.material.specular);
+        this.gl.uniform4fv(this.ambientMatColorLocation, this.material.ambient);
+        this.gl.uniform1f(this.blinnGammaLocation, this.material.blinnGamma);
         this.gl.uniform1f(this.alphaLocation, this.alpha);
         this.gl.uniform4fv(this.pointLightColorLocation, lights.pointLight.color);
         this.gl.uniform3fv(this.pointLightLocation, utils.multiplyMatrixVector(camera.viewMat, lights.pointLight.position).slice(0,3));

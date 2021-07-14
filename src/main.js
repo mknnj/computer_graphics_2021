@@ -4,11 +4,14 @@ import { Skybox } from "./Skybox.js";
 import { TextureHandler } from "./TextureHandler.js";
 import { SceneHandler } from "./SceneHandler.js";
 import { GuiElement } from "./GuiElement.js";
+import { GameplayHandler } from "./GameplayHandler.js";
 
 var scene;
+var oldScene;
 var canvas;
 var skybox;
 var gl;
+var isGameplay = false;
 
 async function main() {
     canvas = document.querySelector("#my-canvas");
@@ -33,7 +36,7 @@ async function main() {
     await scene.loadMaterials("/config/materials.json");
     await scene.loadLights("/config/lights.json");
     await scene.loadTextures("/config/textures.json");
-    await scene.load("/assets/scenes/scene1.json");
+    await scene.load("/assets/scenes/scene2.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
 
     scene.guiElements.push(new GuiElement(sh.getProgram("gui"),
@@ -115,15 +118,25 @@ function handleKeyPressed(e){
         skybox.nextSkybox();
     if (e.key.toLowerCase() == "l" && skybox != null)
         skybox.prevSkybox();
+    if (e.key.toLowerCase() == "enter" && isGameplay == false) {
+        oldScene = scene;
+        scene = new GameplayHandler(oldScene);
+        isGameplay = true;
+    }
 }
 
-function placeSelectedItem(e){
-    scene.placeSelected();
+function startPlaceItem(){
+    scene.isPlacing = true;
+}
+
+function stopPlaceItem(){
+    scene.isPlacing = false;
 }
 
 addEventListener("mousemove", updateCameraAngle, false);
 addEventListener("mousedown", lockChange, false);
-addEventListener("mouseup", placeSelectedItem, false);
+addEventListener("mousedown", startPlaceItem, false);
+addEventListener("mouseup", stopPlaceItem, false);
 addEventListener("mouseup", deleteFocusedItem, false);
 addEventListener("keydown", activateCameraMovement, false);
 addEventListener("keyup", handleKeyPressed, false);

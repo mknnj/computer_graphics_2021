@@ -1,6 +1,18 @@
 {
+    "spawnBrick" : {
+        "diffuse": [0.0, 0.6, 0.0, 1.0],
+        "ambient": [0.0, 0.2, 0.0, 1],
+        "specular": [0.2, 0.2, 0.2, 1],
+        "blinnGamma": 0.1
+    },
+    "goalBrick" : {
+        "diffuse": [0.0, 0.0, 0.6, 1.0],
+        "ambient": [0.0, 0.0, 0.2, 1],
+        "specular": [0.2, 0.2, 0.2, 1],
+        "blinnGamma": 0.1
+    },
     "brick" : {
-        "diffuse": [0.6, 0, 0, 1],
+        "diffuse": [0.6, 0.0, 0.0, 1.0],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
         "blinnGamma": 0.1
@@ -18,8 +30,8 @@
         "blinnGamma": 0.8
     },
     "ghost" : {
-        "diffuse": [0.6, 0, 0, 1],
-        "ambient": [0.2, 0, 0, 1],
+        "diffuse": [0.2, 0.2, 0.2, 1],
+        "ambient": [0.1, 0.1, 0.1, 1],
         "specular": [0.2, 0.2, 0.2, 1],
         "blinnGamma": 0.8
     },
