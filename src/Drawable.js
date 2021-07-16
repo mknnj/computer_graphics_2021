@@ -74,6 +74,12 @@ export class Drawable {
         this.collider.updateCollider();
     }
 
+    getWorldWithoutRotation(){
+        return utils.MakeWorld(this.position[0], this.position[1], this.position[2],
+            0, 0, 0,
+            this.scale);
+    }
+
     updateAlpha(alpha){ // final transparency of object
         this.alpha = alpha;
     }
@@ -95,7 +101,8 @@ export class Drawable {
         this.gl.vertexAttribPointer(this.uvLocation, 2, this.gl.FLOAT, false, 0, 0);
         
         //matrices uniform
-        var viewWorld = utils.multiplyMatrices(camera.viewMat, this.worldMatrix);
+        
+        var viewWorld = utils.multiplyMatrices(camera.getViewMatrix(), this.worldMatrix);
         this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, false, utils.transposeMatrix(viewWorld));
         this.gl.uniformMatrix4fv(this.projectionMatrixLocation, false, utils.transposeMatrix(utils.multiplyMatrices(camera.projectionMatrix, viewWorld)));
         this.gl.uniformMatrix4fv(this.normalMatrixLocation, false, utils.transposeMatrix(utils.invertMatrix(utils.transposeMatrix(viewWorld))));

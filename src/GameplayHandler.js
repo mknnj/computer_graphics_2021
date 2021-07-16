@@ -10,8 +10,8 @@ export class GameplayHandler {
         this.objects = scene.objects;
         this.lights = scene.lights;
         this.player;
-        this.velocityScale = 0.08;
-        this.jumpStrength = 1;
+        this.velocityScale = 0.05;
+        this.jumpStrength = 0.05;
 
         this.front = false;
         this.back = false;
@@ -46,11 +46,18 @@ export class GameplayHandler {
     }
 
     update(){
-        
         let vel = this.computePlayerVel();
-        this.player.position = utils.addVectors(this.player.position, vel);
-
+        let oldPosition = this.player.position;
+        this.player.position = utils.addVectors(oldPosition, vel);
         this.player.updateWorld();
+        if(this.player.collider.isColliding(this.objects)){
+            this.player.position = oldPosition;
+            this.player.updateWorld();
+        }
+
+        
+        this.camera.updatePos();
+        this.camera.updateMatrices();
     }
 
     computePlayerVel(){

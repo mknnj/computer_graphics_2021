@@ -1,7 +1,6 @@
 import {utils} from "./utils.js";
 
 const RSPE = .08;
-const MSPE = .08;
 
 export class ThirdPersonCamera {
     constructor(gl, player){
@@ -53,7 +52,7 @@ export class ThirdPersonCamera {
 
     mouseMove(e){
         this.ang += RSPE * e.movementX;
-        this.elev -= RSPE * e.movementY;
+        this.elev += RSPE * e.movementY;
     }
 
     updatePos(){

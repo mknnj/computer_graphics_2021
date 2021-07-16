@@ -12,6 +12,9 @@ var canvas;
 var skybox;
 var gl;
 var isGameplay = false;
+var prevTime = 0;
+var lag = 0;
+const MS_PER_UPDATE = 16;
 
 async function main() {
     canvas = document.querySelector("#my-canvas");
@@ -46,16 +49,20 @@ async function main() {
                                             0.1, 0.1,
                                             [1, 0, 0, 0],
                                             scene.texturesDict["scope"]));
-    
-    drawScene();
+    drawScene(performance.now());
 }
 
 function drawScene(time){
     scene.time = time;
-    scene.camera.updateMatrices();
-    scene.update();
-    scene.camera.updatePos();
-		
+    let elapsed = time - prevTime;
+    prevTime = time;
+    lag += elapsed;
+
+    while(lag >= MS_PER_UPDATE){
+        scene.update();
+        lag -= MS_PER_UPDATE;
+    }
+    
     clearBits();
     skybox.draw(scene.camera);
     scene.draw();

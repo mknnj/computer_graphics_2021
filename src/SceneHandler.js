@@ -153,6 +153,8 @@ export class SceneHandler{
     }
 
     update(){
+        this.camera.updatePos();
+        this.camera.updateMatrices();
         this.updateSceneFocus();
         if (this.selected != null){
             this.selected.position = this.camera.getDestination(3);
@@ -164,6 +166,7 @@ export class SceneHandler{
                 this.objects[this.selectedToDelete].updateAlpha((Math.cos(this.time/200)+1.1)/2);
         }
         this.placeSelected();
+        
     }
 
     updateSceneFocus(){

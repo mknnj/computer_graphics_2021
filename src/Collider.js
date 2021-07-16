@@ -6,6 +6,18 @@ export class Collider{
     }
 
     isColliding(objects){
+        let boundaryList = objects
+            .filter((i)=>i.collider!=this)
+            .map((i) => i.collider.boundaries);
+        for (let i of boundaryList)
+            if ((this.boundaries[3] <= i[0] && this.boundaries[0] >= i[3]) && 
+                (this.boundaries[4] <= i[1] && this.boundaries[1] >= i[4]) &&
+                (this.boundaries[5] <= i[2] && this.boundaries[2] >= i[5]))
+                    return true;
+        return false;
+    }
+
+    whereIsColliding(objects){
         let boundaryList = objects.map((i) => i.collider.boundaries);
         for (let i of boundaryList)
             if ((this.boundaries[3] <= i[0] && this.boundaries[0] >= i[3]) && 
@@ -53,7 +65,7 @@ export class Collider{
     updateCollider(){
         this.boundaries = this.drawable.mesh.boundaries;
         
-        this.worldMatrix = this.drawable.worldMatrix;
+        this.worldMatrix = this.drawable.getWorldWithoutRotation();
         let topCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundaries.slice(0,3).concat([1]));
         let bottomCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundaries.slice(3,6).concat([1]));
         this.boundaries = topCorner.slice(0,3).concat(bottomCorner.slice(0,3));
