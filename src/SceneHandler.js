@@ -3,6 +3,9 @@ import { Drawable } from "./Drawable.js";
 import { ObjParser } from "./ObjParser.js";
 import { utils } from "./utils.js";
 
+const RSPE = .08;
+
+
 export class SceneHandler{
  
     constructor(gl, textureHandler, shaderHandler){
@@ -258,6 +261,39 @@ export class SceneHandler{
     getTexture(name){
         if(name===null) return null;
         return this.texturesDict[name];
+    }
+
+    handleKeyPressed(key){
+        if (key == "m")
+            this.save("scene2.json");
+        if (key == "f" && this.camera != null)
+            this.toggleSelected();
+        if (key == "e" && this.camera != null)
+            this.nextSelected();
+        if (key == "q" && this.camera != null)
+            this.prevSelected();
+    }
+
+    mouseMove(e){
+        this.camera.ang += RSPE * e.movementX;
+        this.camera.elev -= RSPE * e.movementY;
+    }
+
+    activateMovement(e){
+        this.setDir(e, true)
+    }
+
+    deactivateMovement(e){
+        this.setDir(e, false);
+    }
+
+    setDir(e, bool){
+        if (e.key.toLowerCase() == "w") this.camera.front = bool;
+        if (e.key.toLowerCase() == "s") this.camera.back = bool;
+        if (e.key.toLowerCase() == "a") this.camera.left = bool;
+        if (e.key.toLowerCase() == "d") this.camera.right = bool;
+        if (e.key == " ") this.camera.high = bool;
+        if (e.key == "Shift") this.camera.down = bool;
     }
 
 }

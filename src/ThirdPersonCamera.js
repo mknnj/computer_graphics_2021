@@ -1,11 +1,14 @@
 import {utils} from "./utils.js";
 
+const RSPE = .08;
 const MSPE = .08;
 
-export class Camera {
-    constructor(gl){
+export class ThirdPersonCamera {
+    constructor(gl, player){
+        this.player = player;
         this.gl = gl;
         this.pos = [0, 0, 0];
+        this.radius = 3;
         this.elev = 0.0;
         this.ang = 0.0;
         this.viewMat = null;
@@ -44,22 +47,23 @@ export class Camera {
     }
 
     getViewMatrix(){
-        this.viewMat = utils.MakeView(this.pos[0], this.pos[1], this.pos[2], this.elev, this.ang);
+        this.viewMat =  utils.invertMatrix(utils.LookAt(this.pos, this.player.position, [0, 1, 0]));
         return this.viewMat;
     }
 
-    updatePos(){
-        let [front, left, high] = [0, 0, 0];
-        if (this.front) front++;
-        if (this.back) front--;
-        if (this.left) left++;
-        if (this.right) left--;
-        if (this.high) high++;
-        if (this.down) high--;
+    mouseMove(e){
+        this.ang += RSPE * e.movementX;
+        this.elev -= RSPE * e.movementY;
+    }
 
-        this.pos[0] += (Math.sin(utils.degToRad(this.ang)) * front - Math.cos(utils.degToRad(this.ang)) * left) * MSPE;
-        this.pos[2] -= (Math.cos(utils.degToRad(this.ang)) * front + Math.sin(utils.degToRad(this.ang)) * left) * MSPE;
-        this.pos[1] += high * MSPE;
+    updatePos(){
+        if(this.elev>89) this.elev = 89;
+        if(this.elev<-89) this.elev = -89;
+        let offset = [this.radius * Math.cos(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90-this.elev)),
+                      this.radius * Math.cos(utils.degToRad(90-this.elev)),
+                      this.radius * Math.sin(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90-this.elev))];
+        this.player.rotation[0] = this.ang;
+        this.pos = utils.addVectors(this.player.position, offset);
     }
 
     updateProjection(){

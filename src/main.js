@@ -80,15 +80,15 @@ function clearBits(){
 }
 
 function updateCameraAngle(e){
-    if (document.pointerLockElement == canvas) scene.camera.mouseMove(e);
+    if (document.pointerLockElement == canvas) scene.mouseMove(e);
 }
 
 function activateCameraMovement(e){
-    if (document.pointerLockElement == canvas) scene.camera.activateMovement(e);
+    if (document.pointerLockElement == canvas) scene.activateMovement(e);
 }
 
 function deactivateCameraMovement(e){
-    if (document.pointerLockElement == canvas) scene.camera.deactivateMovement(e);
+    if (document.pointerLockElement == canvas) scene.deactivateMovement(e);
 }
 
 function lockChange(){
@@ -102,26 +102,23 @@ function updateCameraProjection(){
 }
 
 function deleteFocusedItem(){
-    if(scene != null) scene.deleteFocusedItem();
+    if(scene != null && !isGameplay) scene.deleteFocusedItem();
 }
 
 function handleKeyPressed(e){
-    if (e.key.toLowerCase() == "m" && scene != null)
-        scene.save("scene2.json");
-    if (e.key.toLowerCase() == "f" && scene.camera != null)
-        scene.toggleSelected();
-    if (e.key.toLowerCase() == "e" && scene.camera != null)
-        scene.nextSelected();
-    if (e.key.toLowerCase() == "q" && scene.camera != null)
-        scene.prevSelected();
-    if (e.key.toLowerCase() == "p" && skybox != null)
-        skybox.nextSkybox();
-    if (e.key.toLowerCase() == "l" && skybox != null)
-        skybox.prevSkybox();
-    if (e.key.toLowerCase() == "enter" && isGameplay == false) {
-        oldScene = scene;
-        scene = new GameplayHandler(oldScene);
-        isGameplay = true;
+
+    if(scene!=null)
+        scene.handleKeyPressed(e.key.toLowerCase());
+    if(!isGameplay){
+        if (e.key.toLowerCase() == "p" && skybox != null)
+            skybox.nextSkybox();
+        if (e.key.toLowerCase() == "l" && skybox != null)
+            skybox.prevSkybox();
+        if (e.key.toLowerCase() == "enter" ){
+                oldScene = scene;
+                scene = new GameplayHandler(oldScene);
+                isGameplay = true;
+        }
     }
 }
 
