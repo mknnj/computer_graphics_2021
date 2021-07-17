@@ -159,12 +159,6 @@ export class SceneHandler{
             this.selectable[this.currentSelectedIndex].scale, 
             this.texturesDict[this.selectable[this.currentSelectedIndex].texture]
         );
-        this.selected.collider.renderer = new ColliderRenderer(
-            this.shaderHandler.getProgram("lit"), 
-            this.shaderHandler.getJson("lit"), 
-            this.gl,
-            this.selected.collider
-        );
     }
 
     update(){
@@ -207,6 +201,12 @@ export class SceneHandler{
             if (this.selected.name === "goalBrick" && this.isGoalPresent) return;
             if (this.isPlacing && this.selected.collider.isCollidingWith(this.objects) == null){
                 this.selected.updateAlpha(1);
+                this.selected.collider.renderer = new ColliderRenderer(
+                    this.shaderHandler.getProgram("lit"), 
+                    this.shaderHandler.getJson("lit"), 
+                    this.gl,
+                    this.selected.collider
+                );
                 this.objects.push(this.selected);
                 if (this.selected.name === "spawnBrick") this.isSpawnPresent = true;
                 else if (this.selected.name === "goalBrick") this.isGoalPresent = true;

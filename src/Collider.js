@@ -67,11 +67,11 @@ export class Collider{
     }
 
     updateCollider(){
-        this.boundaries = this.drawable.mesh.boundaries;
+        this.boundariesOriginal = this.drawable.mesh.boundaries;
         
         this.worldMatrix = this.drawable.getWorldWithoutRotation();
-        let topCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundaries.slice(0,3).concat([1]));
-        let bottomCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundaries.slice(3,6).concat([1]));
+        let topCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundariesOriginal.slice(0,3).concat([1]));
+        let bottomCorner = utils.multiplyMatrixVector(this.worldMatrix, this.boundariesOriginal.slice(3,6).concat([1]));
         this.boundaries = topCorner.slice(0,3).concat(bottomCorner.slice(0,3));
     }
 

@@ -22,21 +22,35 @@ export class ColliderRenderer {
     computeMesh(){
         let mesh = {
             vertices : [
-                this.parent.boundaries[0], this.parent.boundaries[1],this.parent.boundaries[2],
-                this.parent.boundaries[0], this.parent.boundaries[1], this.parent.boundaries[5],
-                this.parent.boundaries[0], this.parent.boundaries[1],this.parent.boundaries[5],
-                this.parent.boundaries[0], this.parent.boundaries[4], this.parent.boundaries[5],
-                this.parent.boundaries[0], this.parent.boundaries[4],this.parent.boundaries[5],
-                this.parent.boundaries[0], this.parent.boundaries[4], this.parent.boundaries[2],
-                this.parent.boundaries[0], this.parent.boundaries[4],this.parent.boundaries[2],
-                this.parent.boundaries[0], this.parent.boundaries[1], this.parent.boundaries[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[2],
+
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[2],
+
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[1],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[1], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[5],
+                this.parent.boundariesOriginal[3], this.parent.boundariesOriginal[4],this.parent.boundariesOriginal[2],
+                this.parent.boundariesOriginal[0], this.parent.boundariesOriginal[4], this.parent.boundariesOriginal[2],
             ],
             indices : [
-                0, 1,
-                2, 3,
-                4, 5,
-                6, 7
-                
+                ...Array(24).keys()
             ]
         };
         return mesh;
@@ -48,7 +62,6 @@ export class ColliderRenderer {
         
         this.colorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[0]);
         this.projectionMatrixLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[1]);
-        console.log(this.mesh);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), this.gl.STATIC_DRAW);
         
@@ -65,9 +78,7 @@ export class ColliderRenderer {
         this.gl.vertexAttribPointer(this.positionLocation, 3, this.gl.FLOAT, false, 0, 0);
         
         //uniforms
-        
-        var viewWorld = utils.multiplyMatrices(camera.getViewMatrix(), 
-        utils.MakeWorld(this.parent.drawable.position[0], this.parent.drawable.position[1], this.parent.drawable.position[2], 0, 0, 0, 1));
+        let viewWorld = utils.multiplyMatrices( camera.getViewMatrix(), this.parent.worldMatrix);
         this.gl.uniformMatrix4fv(this.projectionMatrixLocation, false, utils.transposeMatrix(utils.multiplyMatrices(camera.projectionMatrix, viewWorld)));
         this.gl.uniform4fv(this.colorLocation, this.color);
         
