@@ -7,7 +7,7 @@ export class ThirdPersonCamera {
         this.player = player;
         this.gl = gl;
         this.pos = [0, 0, 0];
-        this.radius = 3;
+        this.radius = 2.3;
         this.elev = 0.0;
         this.ang = 0.0;
         this.viewMat = null;

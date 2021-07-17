@@ -17,6 +17,15 @@
             "rotation" : [0, 0, 0],
             "scale" : 0.01,
             "texture" : null
+        },
+        {
+            "name": "plane",
+            "program" : "main",
+            "mesh" : "plane",
+            "position" : [0, -5, 0],
+            "rotation" : [0, 0, 0],
+            "scale" : 1.0,
+            "texture" : null
         }
     ]
 }

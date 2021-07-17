@@ -126,6 +126,11 @@ function handleKeyPressed(e){
                 scene = new GameplayHandler(oldScene);
                 isGameplay = true;
         }
+    }else{
+        if (e.key.toLowerCase() == "enter" ){
+            scene = oldScene;
+            isGameplay = false;
+        }
     }
 }
 

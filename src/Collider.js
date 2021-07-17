@@ -5,16 +5,17 @@ export class Collider{
         this.drawable = drawable;
     }
 
-    isColliding(objects){
+    isCollidingWith(objects){
         let boundaryList = objects
             .filter((i)=>i.collider!=this)
-            .map((i) => i.collider.boundaries);
+            .map((i) => i.collider);
         for (let i of boundaryList)
-            if ((this.boundaries[3] <= i[0] && this.boundaries[0] >= i[3]) && 
-                (this.boundaries[4] <= i[1] && this.boundaries[1] >= i[4]) &&
-                (this.boundaries[5] <= i[2] && this.boundaries[2] >= i[5]))
-                    return true;
-        return false;
+            if ((this.boundaries[3] <= i.boundaries[0] && this.boundaries[0] >= i.boundaries[3]) && 
+                (this.boundaries[4] <= i.boundaries[1] && this.boundaries[1] >= i.boundaries[4]) &&
+                (this.boundaries[5] <= i.boundaries[2] && this.boundaries[2] >= i.boundaries[5])){
+                    return i;
+                }
+        return null;
     }
 
     whereIsColliding(objects){

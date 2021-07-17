@@ -105,7 +105,7 @@ export class SceneHandler{
     }
 
     draw(){
-        //this.objects.forEach((x)=>x.draw(this.camera, this.lights));
+        this.objects.forEach((x)=>x.draw(this.camera, this.lights));
         if(this.showColliders)
             this.objects.forEach((x)=>x.collider.draw(this.camera));
         if (this.selected != null)
@@ -205,7 +205,7 @@ export class SceneHandler{
         if (this.selected != null){
             if (this.selected.name === "spawnBrick" && this.isSpawnPresent) return;
             if (this.selected.name === "goalBrick" && this.isGoalPresent) return;
-            if (this.isPlacing && !this.selected.collider.isColliding(this.objects)){
+            if (this.isPlacing && this.selected.collider.isCollidingWith(this.objects) == null){
                 this.selected.updateAlpha(1);
                 this.objects.push(this.selected);
                 if (this.selected.name === "spawnBrick") this.isSpawnPresent = true;

@@ -38,6 +38,7 @@ export class GameplayHandler {
             0.2,
             scene.getTexture("ghost")
         );
+        this.player.scene = false;
         this.objects.push(this.player);
     }
 
@@ -50,12 +51,14 @@ export class GameplayHandler {
         let oldPosition = this.player.position;
         this.player.position = utils.addVectors(oldPosition, vel);
         this.player.updateWorld();
-        if(this.player.collider.isColliding(this.objects)){
-            this.player.position = oldPosition;
+        let colliding = this.player.collider.isCollidingWith(this.objects);
+        if(colliding != null){
+            if (colliding.drawable.name === "plane") this.respawnPlayer();
+            else if (colliding.drawable.name === "goalBrick") this.victory();
+            else this.player.position = oldPosition;
             this.player.updateWorld();
         }
 
-        
         this.camera.updatePos();
         this.camera.updateMatrices();
     }
@@ -74,6 +77,23 @@ export class GameplayHandler {
         velocity[0] = -(Math.cos(utils.degToRad(this.player.rotation[0])) * front + Math.sin(utils.degToRad(this.player.rotation[0])) * left) * this.velocityScale;
         velocity[1] = high * this.jumpStrength;
         return velocity;
+    }
+
+    respawnPlayer(){
+        alert("YOU ARE DEAD");
+        var position = this.objects.filter((x) => x.name === "spawnBrick")[0].position;
+        this.player.position = utils.addVectors(position, [0, 1, 0]);
+        this.front = false;
+        this.back = false;
+        this.left = false;
+        this.right = false;
+        this.high = false;
+        this.down = false;
+    }
+
+    victory(){
+        alert("CONGRATULATIONS! YOU WON");
+        this.respawnPlayer();
     }
 
     //HANDLING INPUT
