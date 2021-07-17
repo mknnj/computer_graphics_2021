@@ -195,6 +195,11 @@ export class SceneHandler{
         }
     }
 
+    beforeChangeScene(){
+        if(this.selectedToDelete != -1)
+                this.objects[this.selectedToDelete].updateAlpha(1);
+    }
+
     placeSelected(){
         if (this.selected != null){
             if (this.selected.name === "spawnBrick" && this.isSpawnPresent) return;

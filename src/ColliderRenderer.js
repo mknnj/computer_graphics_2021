@@ -3,7 +3,7 @@ import {utils} from "./utils.js";
 export class ColliderRenderer {
     constructor(program, jsonObj, gl, parent){
         
-        this.color = [0, 0, 1.0, 1.0];
+        this.color = [1.0, 1.0, 0, 1.0];
         this.parent = parent; //collider which this renderer is attached to
         this.mesh = this.computeMesh();
 

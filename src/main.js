@@ -128,6 +128,7 @@ function handleKeyPressed(e){
         }
     }else{
         if (e.key.toLowerCase() == "enter" ){
+            scene.beforeChangeScene();
             scene = oldScene;
             isGameplay = false;
         }

@@ -11,7 +11,9 @@ export class GameplayHandler {
         this.objects = scene.objects;
         this.lights = scene.lights;
         this.player;
+        this.velocity = [0, 0, 0];
         this.velocityScale = 0.05;
+        this.gravityScale = 0.002;
         this.jumpStrength = 0.05;
 
         this.front = false;
@@ -58,9 +60,10 @@ export class GameplayHandler {
     }
 
     update(){
-        let vel = this.computePlayerVel();
+        this.velocity = this.computePlayerVel();
+        
         let oldPosition = this.player.position;
-        this.player.position = utils.addVectors(oldPosition, vel);
+        this.player.position = utils.addVectors(oldPosition, this.velocity);
         this.player.updateWorld();
         let colliding = this.player.collider.isCollidingWith(this.objects);
         if(colliding != null){
@@ -70,6 +73,7 @@ export class GameplayHandler {
             } 
             else if (colliding.drawable.name === "goalBrick") this.victory();
             else this.player.position = oldPosition;
+            this.velocity = [0, 0, 0];
             this.player.updateWorld();
         }
 
@@ -78,7 +82,9 @@ export class GameplayHandler {
     }
 
     computePlayerVel(){
-        let velocity = [0, 0, 0];
+        let accel = [0, -this.gravityScale, 0];
+        
+        let velocity = utils.addVectors(this.velocity, accel);
         let [front, left, high] = [0, 0, 0];
         if (this.front) front++;
         if (this.back) front--;
@@ -89,7 +95,11 @@ export class GameplayHandler {
 
         velocity[2] = -(Math.sin(utils.degToRad(this.player.rotation[0])) * front - Math.cos(utils.degToRad(this.player.rotation[0])) * left) * this.velocityScale;
         velocity[0] = -(Math.cos(utils.degToRad(this.player.rotation[0])) * front + Math.sin(utils.degToRad(this.player.rotation[0])) * left) * this.velocityScale;
-        velocity[1] = high * this.jumpStrength;
+
+        if(Math.abs(this.velocity[1]) < 0.0001){
+            velocity[1] += high * this.jumpStrength;
+        }
+        
         return velocity;
     }
 
@@ -137,5 +147,10 @@ export class GameplayHandler {
         if (e.key == " ") this.high = bool;
         if (e.key == "Shift") this.down = bool;
         
+    }
+
+    beforeChangeScene(){
+        var playerPosition = this.objects.map((x, i)=>{return {name:x.name, index:i}}).filter((x) => x.name === "ghost")[0].index;
+        this.objects.splice(playerPosition, 1);
     }
 }
