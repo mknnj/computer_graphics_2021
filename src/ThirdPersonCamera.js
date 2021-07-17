@@ -52,15 +52,15 @@ export class ThirdPersonCamera {
 
     mouseMove(e){
         this.ang += RSPE * e.movementX;
-        this.elev += RSPE * e.movementY;
+        this.elev -= RSPE * e.movementY;
     }
 
     updatePos(){
         if(this.elev>89) this.elev = 89;
         if(this.elev<-89) this.elev = -89;
-        let offset = [this.radius * Math.cos(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90-this.elev)),
-                      this.radius * Math.cos(utils.degToRad(90-this.elev)),
-                      this.radius * Math.sin(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90-this.elev))];
+        let offset = [this.radius * Math.cos(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90+this.elev)),
+                      this.radius * Math.cos(utils.degToRad(90+this.elev)),
+                      this.radius * Math.sin(utils.degToRad(this.ang)) * Math.sin(utils.degToRad(90+this.elev))];
         this.player.rotation[0] = this.ang;
         this.pos = utils.addVectors(this.player.position, offset);
     }
