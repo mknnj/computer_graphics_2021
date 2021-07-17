@@ -1,4 +1,5 @@
 import { Camera } from "./Camera.js";
+import { ColliderRenderer } from "./ColliderRenderer.js";
 import { Drawable } from "./Drawable.js";
 import { ObjParser } from "./ObjParser.js";
 import { utils } from "./utils.js";
@@ -7,7 +8,6 @@ const RSPE = .08;
 
 
 export class SceneHandler{
- 
     constructor(gl, textureHandler, shaderHandler){
         this.gl = gl;
         this.camera = new Camera(gl);
@@ -22,6 +22,7 @@ export class SceneHandler{
         this.isPlacing = false;
         this.isSpawnPresent = false;
         this.isGoalPresent = false;
+        this.showColliders = true;
     }
 
     async load(url){
@@ -42,6 +43,12 @@ export class SceneHandler{
                     x.rotation,
                     x.scale,
                     this.getTexture(x.texture)
+                );
+                toAdd.collider.renderer = new ColliderRenderer(
+                    this.shaderHandler.getProgram("lit"), 
+                    this.shaderHandler.getJson("lit"), 
+                    this.gl,
+                    toAdd.collider
                 );
                 this.objects.push(toAdd);
                 toAdd.meshName = x.mesh;
@@ -98,7 +105,9 @@ export class SceneHandler{
     }
 
     draw(){
-        this.objects.forEach((x)=>x.draw(this.camera, this.lights));
+        //this.objects.forEach((x)=>x.draw(this.camera, this.lights));
+        if(this.showColliders)
+            this.objects.forEach((x)=>x.collider.draw(this.camera));
         if (this.selected != null)
             this.selected.draw(this.camera, this.lights);
         else this.guiElements.forEach((x)=>x.draw());
@@ -149,6 +158,12 @@ export class SceneHandler{
             this.selectable[this.currentSelectedIndex].rotation, 
             this.selectable[this.currentSelectedIndex].scale, 
             this.texturesDict[this.selectable[this.currentSelectedIndex].texture]
+        );
+        this.selected.collider.renderer = new ColliderRenderer(
+            this.shaderHandler.getProgram("lit"), 
+            this.shaderHandler.getJson("lit"), 
+            this.gl,
+            this.selected.collider
         );
     }
 
@@ -275,6 +290,8 @@ export class SceneHandler{
             this.nextSelected();
         if (key == "q" && this.camera != null)
             this.prevSelected();
+        if (key == "c")
+            this.showColliders = !this.showColliders;
     }
 
     mouseMove(e){

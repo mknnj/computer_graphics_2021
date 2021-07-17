@@ -11,8 +11,8 @@
         "name": "lit",
         "vertexShader": "vs_lit.glsl",
         "fragmentShader": "fs_lit.glsl",
-        "attribNames": ["a_position","a_normal"],
-        "uniformNames": ["u_diffuse", "u_lightDirection", "u_projection", "u_view", "u_world"]
+        "attribNames": ["a_position"],
+        "uniformNames": ["u_color", "u_projection"]
     },
     {
         "name": "main",

@@ -32,6 +32,9 @@ export class Collider{
                 (this.boundaries[4] <= point[1] && this.boundaries[1] >= point[1]) &&
                 (this.boundaries[5] <= point[2] && this.boundaries[2] >= point[2]));
     }
+    draw(camera){
+        this.renderer.draw(camera);
+    }
 
     isCollidingWithRay(ray, rayOrigin){
         let dirfracx = 1.0 / ray[0];
