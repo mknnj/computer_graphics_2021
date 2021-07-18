@@ -15,6 +15,8 @@ export class GameplayHandler {
         this.velocityScale = 0.05;
         this.gravityScale = 0.002;
         this.jumpStrength = 0.05;
+        this.canJump = false;
+        this.debug = false;
 
         this.front = false;
         this.back = false;
@@ -49,6 +51,8 @@ export class GameplayHandler {
             this.gl,
             this.player.collider
         );
+
+        this.player.collider.useSixColliders();
         this.player.scene = false;
         this.objects.push(this.player);
     }
@@ -63,17 +67,24 @@ export class GameplayHandler {
         this.velocity = this.computePlayerVel();
         
         let oldPosition = this.player.position;
-        this.player.position = utils.addVectors(oldPosition, this.velocity);
+        this.player.position = utils.addVectors(this.player.position, this.velocity);
         this.player.updateWorld();
         let colliding = this.player.collider.isCollidingWith(this.objects);
+        
+        
         if(colliding != null){
             if (colliding.drawable.name === "plane"){
                 alert("YOU ARE DEAD");
                 this.respawnPlayer();
             } 
             else if (colliding.drawable.name === "goalBrick") this.victory();
-            else this.player.position = oldPosition;
-            this.velocity = [0, 0, 0];
+            else {
+                let dirColliders = this.player.collider.sixColliders(this.objects);
+                this.canJump = dirColliders.down;
+                let counterVel = this.computeCounterVel(dirColliders);
+                this.player.position = utils.addVectors(oldPosition, counterVel);
+                //this.player.position = oldPosition;
+            }
             this.player.updateWorld();
         }
 
@@ -96,11 +107,30 @@ export class GameplayHandler {
         velocity[2] = -(Math.sin(utils.degToRad(this.player.rotation[0])) * front - Math.cos(utils.degToRad(this.player.rotation[0])) * left) * this.velocityScale;
         velocity[0] = -(Math.cos(utils.degToRad(this.player.rotation[0])) * front + Math.sin(utils.degToRad(this.player.rotation[0])) * left) * this.velocityScale;
 
-        if(Math.abs(this.velocity[1]) < 0.0001){
-            velocity[1] += high * this.jumpStrength;
+        if(this.canJump && high){
+            velocity[1] += this.jumpStrength;
+            this.canJump = false;
         }
         
         return velocity;
+    }
+
+    computeCounterVel(dirColliders){
+        var counterVelocity = [0, 0, 0];
+        if(!dirColliders.down && !dirColliders.up)
+            counterVelocity[1] = this.velocity[1];
+        else this.velocity[1] = 0;
+        
+        if(!dirColliders.front && !dirColliders.back)
+            counterVelocity[2] = this.velocity[2];
+        else this.velocity[2] = 0;
+            
+        
+        if(!dirColliders.left && !dirColliders.right)
+            counterVelocity[0] = this.velocity[0];
+        else this.velocity[0] = 0;
+         
+        return counterVelocity;
     }
 
     respawnPlayer(){
@@ -124,6 +154,12 @@ export class GameplayHandler {
     handleKeyPressed(key){
         if (key == "c")
             this.showColliders = !this.showColliders;
+        if(key =="h"){
+            console.log(this.player.collider.sixColliders(this.objects));
+        }
+
+        if(key=="y")
+            this.debug = !this.debug;
     }
 
     mouseMove(e){

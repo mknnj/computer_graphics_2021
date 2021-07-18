@@ -75,6 +75,7 @@ export class SceneHandler{
         this.objects.forEach((x)=>{
             dump.objects.push({
                 "program" : x.jsonObj.name,
+                "name" : x.name,
                 "mesh" : x.meshName,
                 "position" : x.position,
                 "rotation" : x.rotation,
@@ -159,6 +160,8 @@ export class SceneHandler{
             this.selectable[this.currentSelectedIndex].scale, 
             this.texturesDict[this.selectable[this.currentSelectedIndex].texture]
         );
+        this.selected.meshName = this.selectable[this.currentSelectedIndex].mesh;
+        this.selected.textureName = this.selectable[this.currentSelectedIndex].texture;
     }
 
     update(){
@@ -198,6 +201,10 @@ export class SceneHandler{
     beforeChangeScene(){
         if(this.selectedToDelete != -1)
                 this.objects[this.selectedToDelete].updateAlpha(1);
+    }
+
+    validScene(){
+        return this.isSpawnPresent && this.isGoalPresent;
     }
 
     placeSelected(){

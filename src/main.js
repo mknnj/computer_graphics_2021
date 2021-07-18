@@ -39,7 +39,7 @@ async function main() {
     await scene.loadMaterials("/config/materials.json");
     await scene.loadLights("/config/lights.json");
     await scene.loadTextures("/config/textures.json");
-    await scene.load("/assets/scenes/scene2.json");
+    await scene.load("/assets/scenes/scene3.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
 
     scene.guiElements.push(new GuiElement(sh.getProgram("gui"),
@@ -121,11 +121,14 @@ function handleKeyPressed(e){
             skybox.nextSkybox();
         if (e.key.toLowerCase() == "l" && skybox != null)
             skybox.prevSkybox();
-        if (e.key.toLowerCase() == "enter" ){
-                oldScene = scene;
-                scene = new GameplayHandler(oldScene);
-                isGameplay = true;
-        }
+        if (e.key.toLowerCase() == "enter" )
+                if(scene.validScene()){
+                    oldScene = scene;
+                    scene = new GameplayHandler(oldScene);
+                    isGameplay = true;
+                }
+                else alert("INVALID SCENE \nInsert a spawn and a goal");
+                
     }else{
         if (e.key.toLowerCase() == "enter" ){
             scene.beforeChangeScene();
