@@ -37,9 +37,10 @@ async function main() {
     scene = new SceneHandler(gl, th, sh);
     await scene.loadMeshes("/config/mesh.json");
     await scene.loadMaterials("/config/materials.json");
-    await scene.loadLights("/config/lights.json");
+    
     await scene.loadTextures("/config/textures.json");
     await scene.load("/assets/scenes/scene3.json");
+    await scene.loadLights("/config/lights.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
 
     scene.guiElements.push(new GuiElement(sh.getProgram("gui"),

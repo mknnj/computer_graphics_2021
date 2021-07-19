@@ -40,19 +40,22 @@ export class Drawable {
         this.normalMatrixLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[2]);
         this.textureLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[3]);
         this.textureBoolLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[4]);
-        this.eyePositionLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[5]);
-        this.diffuseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[6]);
-        this.specularLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[7]);
-        this.ambientMatColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
-        this.blinnGammaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
-        this.alphaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
-        this.pointLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[11]);
-        this.pointLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[12]);
-        this.pointLightTargetLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[13]);
-        this.pointLightDecayLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[14]);
-        this.directionalLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[15]);
-        this.directionLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[16]);
-        this.ambientLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[17]);
+        
+        this.diffuseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[5]);
+        this.specularLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[6]);
+        this.ambientMatColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[7]);
+        this.blinnGammaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
+        this.alphaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
+        this.spotColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
+        this.spotLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[11]);
+        this.spotTargetLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[12]);
+        this.spotDecayLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[13]);
+        this.spotConeOLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[14]);
+        this.spotConeILocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[15]);
+        this.spotDirLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[16]);
+        this.directionalLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[17]);
+        this.directionLightColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[18]);
+        this.ambientLightLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[19]);
         
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.mesh.vertices), this.gl.STATIC_DRAW);
@@ -119,18 +122,23 @@ export class Drawable {
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         }
 
+
+        
         //lights uniform
-        this.gl.uniform3fv(this.eyePositionLocation, camera.pos);
+
         this.gl.uniform4fv(this.diffuseLocation, this.material.diffuse);
         this.gl.uniform4fv(this.specularLocation, this.material.specular);
         this.gl.uniform4fv(this.ambientMatColorLocation, this.material.ambient);
         this.gl.uniform1f(this.blinnGammaLocation, this.material.blinnGamma);
         this.gl.uniform1f(this.alphaLocation, this.alpha);
-        this.gl.uniform4fv(this.pointLightColorLocation, lights.pointLight.color);
-        this.gl.uniform3fv(this.pointLightLocation, utils.multiplyMatrixVector(camera.viewMat, lights.pointLight.position).slice(0,3));
-        this.gl.uniform1f(this.pointLightTargetLocation, lights.pointLight.target);
-        this.gl.uniform1f(this.pointLightDecayLocation, lights.pointLight.decay);
-        this.gl.uniform3fv(this.directionalLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.viewMat), lights.directionalLight.direction));
+        this.gl.uniform4fv(this.spotColorLocation, lights.spotLight.color);
+        this.gl.uniform3fv(this.spotLocation, utils.multiplyMatrixVector(camera.getViewMatrix(), lights.spotLight.position).slice(0,3));
+        this.gl.uniform1f(this.spotTargetLocation, lights.spotLight.target);
+        this.gl.uniform1f(this.spotDecayLocation, lights.spotLight.decay);
+        this.gl.uniform1f(this.spotConeOLocation, lights.spotLight.coneO);
+        this.gl.uniform1f(this.spotConeILocation, lights.spotLight.coneI);
+        this.gl.uniform3fv(this.spotDirLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix()), lights.spotLight.direction));
+        this.gl.uniform3fv(this.directionalLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix()), lights.directionalLight.direction));
         this.gl.uniform4fv(this.directionLightColorLocation, lights.directionalLight.color);
         this.gl.uniform4fv(this.ambientLightLocation, lights.ambient.color);
 

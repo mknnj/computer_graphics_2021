@@ -277,6 +277,14 @@ export class SceneHandler{
     async loadLights(url){
         var lightsDict = (await this.readJson(url));
         this.lights = lightsDict.lights;
+        if(this.isGoalPresent){
+            var spotLightPosition = this.objects.filter((x) => x.name === "goalBrick")[0].position;
+            var finalPos = utils.addVectors(spotLightPosition, [0,1,0]);
+            this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
+        }
+        else this.lights.spotLight.color = [0,0,0,0];
+
+        console.log(this.lights)
     }
 
     async loadTextures(url){
