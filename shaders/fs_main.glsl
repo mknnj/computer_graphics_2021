@@ -14,7 +14,7 @@ uniform float u_isTexturePresent; //1 if using texture
 uniform vec4 u_diffuseColor; //material diffuse color
 uniform vec4 u_specularColor; //material specular color
 uniform vec4 u_ambientMatColor; //material ambient color
-uniform float u_blinnGamma; //gamma parameter for blinn reflection
+uniform float u_phongGamma; //gamma parameter for Phong reflection
 uniform float u_alpha; //alpha of final color
 
 //spot light
@@ -58,30 +58,29 @@ void main() {
     
     //directional light
     vec3 normalizedDirLightDirection = normalize(u_dirLightDirection);
-    vec4 dirLightColor = u_dirLightColor;
 
-    vec4 spotDiffuseColor = clamp(diffuseColor * spotColor * dot(nSpotDir, normalizedNormal), 0.0, 1.0);
-    vec4 dirLightDiffuseColor = clamp(diffuseColor * dirLightColor * dot(normalizedDirLightDirection, normalizedNormal), 0.0, 1.0);
+    vec4 spotDiffuseColor = clamp(diffuseColor * spotColor * dot(- nSpotDir, normalizedNormal), 0.0, 1.0);
+    vec4 dirLightDiffuseColor = clamp(diffuseColor * u_dirLightColor * dot(- normalizedDirLightDirection, normalizedNormal), 0.0, 1.0);
 
     //specular color 
     vec3 reflectionSpot = - reflect(spotDir, normalizedNormal);
     float dotSpotDirNormalVec = max(dot(normalizedNormal, spotDir), 0.0);
     float dotReflectionSpotEyeDir = max(dot(reflectionSpot, normalizedEyeDirVec), 0.0);
     vec4 spotSpecularColor = spotColor * u_specularColor * max(sign(dotSpotDirNormalVec),0.0);
-    vec4 spotSpecular = clamp(pow(dotReflectionSpotEyeDir, u_blinnGamma) * spotSpecularColor, 0.0, 1.0);
+    vec4 spotSpecular = pow(dotReflectionSpotEyeDir, u_phongGamma) * spotSpecularColor;
 
     vec3 reflectionDirLight = -reflect(normalizedDirLightDirection, normalizedNormal);
     float dotDirLightDirNormalVec = max(dot(normalizedNormal, normalizedDirLightDirection), 0.0);
     float dotReflectionDirEyeDir = max(dot(reflectionDirLight, normalizedEyeDirVec), 0.0);
-    vec4 dirLightSpecularColor = dirLightColor * u_specularColor * max(sign(dotDirLightDirNormalVec),0.0);
-    vec4 dirLightSpecular = clamp(pow(dotReflectionDirEyeDir, u_blinnGamma) * dirLightSpecularColor, 0.0, 1.0);
+    vec4 dirLightSpecularColor = u_dirLightColor * u_specularColor * max(sign(dotDirLightDirNormalVec),0.0);
+    vec4 dirLightSpecular = clamp(pow(dotReflectionDirEyeDir, u_phongGamma) * dirLightSpecularColor, 0.0, 1.0);
 
     //ambient color
     vec4 ambientColorResult =clamp( u_ambientLight * ambientColor, 0.0, 1.0);
 
     outColor = vec4(clamp(ambientColorResult +
                             spotDiffuseColor +
-                            dirLightDiffuseColor +
+                            dirLightDiffuseColor + 
                             spotSpecular +
                             dirLightSpecular
                             , 0.0, 1.0).xyz, u_alpha);

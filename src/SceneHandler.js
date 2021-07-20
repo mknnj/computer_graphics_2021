@@ -111,11 +111,10 @@ export class SceneHandler{
             this.objects.forEach((x)=>x.collider.draw(this.camera));
         if (this.selected != null)
             this.selected.draw(this.camera, this.lights);
-        else this.guiElements.forEach((x)=>x.draw());
-    }
-
-    resizeGui(){
-        this.guiElements.forEach((x)=>x.resize());
+        else {
+            this.guiElements.forEach((x)=>x.draw());
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+        }
     }
 
     toggleSelected(){
@@ -221,7 +220,12 @@ export class SceneHandler{
                 );
                 this.objects.push(this.selected);
                 if (this.selected.name === "spawnBrick") this.isSpawnPresent = true;
-                else if (this.selected.name === "goalBrick") this.isGoalPresent = true;
+                else if (this.selected.name === "goalBrick"){
+                    var finalPos = utils.addVectors(this.selected.position, [0,1,0]);
+                    this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
+                    this.lights.spotLight.color = [1,1,1,1];
+                    this.isGoalPresent = true;
+                } 
                 this.instantiateSelected();
             }
         }
@@ -260,7 +264,10 @@ export class SceneHandler{
     deleteFocusedItem(){
         if (this.selected == null && this.selectedToDelete!=-1){
             if (this.objects[this.selectedToDelete].name === "spawnBrick") this.isSpawnPresent = false;
-            else if (this.objects[this.selectedToDelete].name === "goalBrick") this.isGoalPresent = false;
+            else if (this.objects[this.selectedToDelete].name === "goalBrick") {
+                this.lights.spotLight.color = [0,0,0,0];
+                this.isGoalPresent = false;
+            }
             this.objects.splice(this.selectedToDelete, 1);
             this.selectedToDelete = -1;
         }
@@ -277,25 +284,20 @@ export class SceneHandler{
     async loadLights(url){
         var lightsDict = (await this.readJson(url));
         this.lights = lightsDict.lights;
-        let alpha = -utils.degToRad(this.lights.directionalLight.alpha);
-        let beta = -utils.degToRad(this.lights.directionalLight.beta);
-        this.lights.directionalLight.direction = [Math.cos(alpha)*Math.cos(beta), 
-                                Math.sin(alpha),
-                                Math.cos(alpha)*Math.sin(beta)];
-
-        alpha = -utils.degToRad(this.lights.spotLight.alpha);
-        beta = -utils.degToRad(this.lights.spotLight.beta);
-        this.lights.spotLight.direction = [Math.cos(alpha)*Math.cos(beta), 
-                                    Math.sin(alpha),
-                                    Math.cos(alpha)*Math.sin(beta)];
+        this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
+        this.lights.spotLight.direction = this.computeDirection(this.lights.spotLight.alpha, this.lights.spotLight.beta);
         if(this.isGoalPresent){
             var spotLightPosition = this.objects.filter((x) => x.name === "goalBrick")[0].position;
             var finalPos = utils.addVectors(spotLightPosition, [0,1,0]);
-            //this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
+            this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
         }
-        //else this.lights.spotLight.color = [0,0,0,0];
+        else this.lights.spotLight.color = [0,0,0,0];
+    }
 
-        console.log(this.lights)
+    computeDirection(alpha, beta){
+        let a = -utils.degToRad(alpha);
+        let b = -utils.degToRad(beta);
+        return [Math.cos(a)*Math.cos(b), Math.sin(a), Math.cos(a)*Math.sin(b)];
     }
 
     async loadTextures(url){
@@ -323,6 +325,14 @@ export class SceneHandler{
             this.prevSelected();
         if (key == "c")
             this.showColliders = !this.showColliders;
+        if (key == "arrowleft"){
+            this.lights.directionalLight.alpha -= 10;
+            this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
+        }   
+        if (key == "arrowright"){
+            this.lights.directionalLight.alpha += 10;
+            this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
+        }
     }
 
     mouseMove(e){

@@ -7,13 +7,12 @@ export class GuiElement {
         this.texture = texture;
         this.color = color;
         this.gl = gl;
-        var aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
         this.mesh = {
             vertices :[
-                this.position[0]-this.width/(2*aspect), this.position[1]-this.height/(2*aspect),
-                this.position[0]+this.width/(2*aspect), this.position[1]-this.height/(2*aspect),
-                this.position[0]+this.width/(2*aspect), this.position[1]+this.height/(2*aspect),
-                this.position[0]-this.width/(2*aspect), this.position[1]+this.height/(2*aspect)
+                this.position[0]-this.width, this.position[1]-this.height,
+                this.position[0]+this.width, this.position[1]-this.height,
+                this.position[0]+this.width, this.position[1]+this.height,
+                this.position[0]-this.width, this.position[1]+this.height
             ],
             textures : [
                 0, 0,
@@ -39,28 +38,6 @@ export class GuiElement {
         this.setUp();
     }
 
-    resize(){
-        var aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
-        this.mesh = {
-            vertices :[
-                this.position[0]-this.width/(2*aspect), this.position[1]-this.height/(2*aspect),
-                this.position[0]+this.width/(2*aspect), this.position[1]-this.height/(2*aspect),
-                this.position[0]+this.width/(2*aspect), this.position[1]+this.height/(2*aspect),
-                this.position[0]-this.width/(2*aspect), this.position[1]+this.height/(2*aspect)
-            ],
-            textures : [
-                0, 0,
-                1, 0,
-                1, 1,
-                0, 1
-            ],
-            indices : [
-                0, 1, 2, 3, 0, 2
-            ]
-        };
-        //this.setUp();
-    }
-
     setUp(){
         this.gl.useProgram(this.program);
         this.positionLocation = this.gl.getAttribLocation(this.program, this.jsonObj.attribNames[0]);
@@ -82,6 +59,7 @@ export class GuiElement {
 
     draw(){
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        this.gl.viewport(this.gl.canvas.width/2 - this.gl.canvas.height/2, 0, this.gl.canvas.height, this.gl.canvas.height);
         this.gl.enable(this.gl.BLEND);
         this.gl.useProgram(this.program);
         this.gl.bindVertexArray(this.vao);

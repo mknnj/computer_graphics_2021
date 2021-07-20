@@ -47,7 +47,7 @@ async function main() {
                                             sh.getJson("gui"),
                                             gl,
                                             [0,0],
-                                            0.1, 0.1,
+                                            0.05, 0.05,
                                             [1, 0, 0, 0],
                                             scene.texturesDict["scope"]));
     drawScene(performance.now());
@@ -104,8 +104,7 @@ function lockChange(){
 }
 
 function updateCameraProjection(){
-    //setViewportAndCanvas();
-    //scene.resizeGui();
+    setViewportAndCanvas();
     if(scene.camera != null) scene.camera.updateProjection();
 }
 
@@ -125,6 +124,7 @@ function handleKeyPressed(e){
         if (e.key.toLowerCase() == "enter" )
                 if(scene.validScene()){
                     oldScene = scene;
+                    scene.beforeChangeScene();
                     scene = new GameplayHandler(oldScene);
                     isGameplay = true;
                 }

@@ -22,7 +22,7 @@
         "uniformNames": ["u_viewWorldMatrix", "u_projectionMatrix", "u_normalMatrix",
              "u_texture", "u_isTexturePresent",
              "u_diffuseColor", "u_specularColor","u_ambientMatColor",
-             "u_blinnGamma", "u_alpha",
+             "u_phongGamma", "u_alpha",
              "u_spotColor", "u_spotPos","u_spotTarget","u_spotDecay", "u_spotConeOut", "u_spotConeIn", "u_spotDir",
              "u_dirLightDirection", "u_dirLightColor", "u_ambientLight"]
     },

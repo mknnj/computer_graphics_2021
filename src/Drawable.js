@@ -44,7 +44,7 @@ export class Drawable {
         this.diffuseLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[5]);
         this.specularLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[6]);
         this.ambientMatColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[7]);
-        this.blinnGammaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
+        this.phongGammaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[8]);
         this.alphaLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[9]);
         this.spotColorLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[10]);
         this.spotLocation = this.gl.getUniformLocation(this.program, this.jsonObj.uniformNames[11]);
@@ -127,7 +127,7 @@ export class Drawable {
 
 
         let spotLightPositionTransformed = utils.multiplyMatrixVector(camera.getViewMatrix(), lights.spotLight.position).slice(0,3);
-        let lightTransformMatrix = utils.sub3x3from4x4(utils.invertMatrix(utils.transposeMatrix(camera.getViewMatrix())));
+        let lightTransformMatrix = utils.sub3x3from4x4(camera.getViewMatrix());
         let spotLightDirectionTransformed = utils.multiplyMatrix3Vector3(lightTransformMatrix, lights.spotLight.direction);
         let dirLightDirectionTransformed = utils.multiplyMatrix3Vector3(lightTransformMatrix, lights.directionalLight.direction);
 
@@ -136,7 +136,7 @@ export class Drawable {
         this.gl.uniform4fv(this.diffuseLocation, this.material.diffuse);
         this.gl.uniform4fv(this.specularLocation, this.material.specular);
         this.gl.uniform4fv(this.ambientMatColorLocation, this.material.ambient);
-        this.gl.uniform1f(this.blinnGammaLocation, this.material.blinnGamma);
+        this.gl.uniform1f(this.phongGammaLocation, this.material.phongGamma);
         this.gl.uniform1f(this.alphaLocation, this.alpha);
         this.gl.uniform4fv(this.spotColorLocation, lights.spotLight.color);
         this.gl.uniform3fv(this.spotLocation, spotLightPositionTransformed);

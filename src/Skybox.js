@@ -29,12 +29,12 @@ export class Skybox {
     setGeometry(){
         var positions = new Float32Array(
             [
-              -1, -1,
-               1, -1,
-              -1,  1,
-              -1,  1,
-               1, -1,
-               1,  1,
+              -10, -10,
+               10, -10,
+              -10,  10,
+              -10,  10,
+               10, -10,
+               10,  10,
             ]);
           this.gl.bufferData(this.gl.ARRAY_BUFFER, positions, this.gl.STATIC_DRAW);
     }
@@ -95,11 +95,16 @@ export class Skybox {
                 // Now that the image has loaded make copy it to the texture.
                 this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
                 this.gl.texImage2D(target, level, internalFormat, format, type, image);
-                this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
+                //this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
             });
         });
-        this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
-        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_LINEAR);
+        //this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
+        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_WRAP_R, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        
     }
 
     async readJson(textureInfoFile){
