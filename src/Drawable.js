@@ -105,10 +105,13 @@ export class Drawable {
         
         //matrices uniform
         
-        var viewWorld = utils.multiplyMatrices(camera.getViewMatrix(), this.worldMatrix);
-        this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, false, utils.transposeMatrix(viewWorld));
-        this.gl.uniformMatrix4fv(this.projectionMatrixLocation, false, utils.transposeMatrix(utils.multiplyMatrices(camera.projectionMatrix, viewWorld)));
-        this.gl.uniformMatrix4fv(this.normalMatrixLocation, false, utils.transposeMatrix(utils.invertMatrix(utils.transposeMatrix(viewWorld))));
+        let viewWorld = utils.multiplyMatrices(camera.getViewMatrix(), this.worldMatrix);
+        let projectionMatrix = utils.multiplyMatrices(camera.projectionMatrix, viewWorld);
+        let normalMatrix = utils.invertMatrix(utils.transposeMatrix(viewWorld));
+
+        this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, true, viewWorld);
+        this.gl.uniformMatrix4fv(this.projectionMatrixLocation, true, projectionMatrix);
+        this.gl.uniformMatrix4fv(this.normalMatrixLocation, true, normalMatrix);
         
         //texture uniform
         this.gl.uniform1i(this.textureLocation, 0);
@@ -123,22 +126,26 @@ export class Drawable {
         }
 
 
+        let spotLightPositionTransformed = utils.multiplyMatrixVector(camera.getViewMatrix(), lights.spotLight.position).slice(0,3);
+        let lightTransformMatrix = utils.sub3x3from4x4(utils.invertMatrix(utils.transposeMatrix(camera.getViewMatrix())));
+        let spotLightDirectionTransformed = utils.multiplyMatrix3Vector3(lightTransformMatrix, lights.spotLight.direction);
+        let dirLightDirectionTransformed = utils.multiplyMatrix3Vector3(lightTransformMatrix, lights.directionalLight.direction);
+
         
         //lights uniform
-
         this.gl.uniform4fv(this.diffuseLocation, this.material.diffuse);
         this.gl.uniform4fv(this.specularLocation, this.material.specular);
         this.gl.uniform4fv(this.ambientMatColorLocation, this.material.ambient);
         this.gl.uniform1f(this.blinnGammaLocation, this.material.blinnGamma);
         this.gl.uniform1f(this.alphaLocation, this.alpha);
         this.gl.uniform4fv(this.spotColorLocation, lights.spotLight.color);
-        this.gl.uniform3fv(this.spotLocation, utils.multiplyMatrixVector(camera.getViewMatrix(), lights.spotLight.position).slice(0,3));
+        this.gl.uniform3fv(this.spotLocation, spotLightPositionTransformed);
         this.gl.uniform1f(this.spotTargetLocation, lights.spotLight.target);
         this.gl.uniform1f(this.spotDecayLocation, lights.spotLight.decay);
         this.gl.uniform1f(this.spotConeOLocation, lights.spotLight.coneO);
         this.gl.uniform1f(this.spotConeILocation, lights.spotLight.coneI);
-        this.gl.uniform3fv(this.spotDirLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix()), lights.spotLight.direction));
-        this.gl.uniform3fv(this.directionalLightLocation, utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(camera.getViewMatrix()), lights.directionalLight.direction));
+        this.gl.uniform3fv(this.spotDirLocation,spotLightDirectionTransformed );
+        this.gl.uniform3fv(this.directionalLightLocation, dirLightDirectionTransformed);
         this.gl.uniform4fv(this.directionLightColorLocation, lights.directionalLight.color);
         this.gl.uniform4fv(this.ambientLightLocation, lights.ambient.color);
 

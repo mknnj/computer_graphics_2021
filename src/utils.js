@@ -226,7 +226,7 @@ createProgram:function(gl, vertexShader, fragmentShader) {
 
 	transposeMatrix3 : function(a) {
 
-		out = [];
+		let out = [];
 		
 		out[0] = a[0];
 		out[1] = a[3];
@@ -243,7 +243,7 @@ createProgram:function(gl, vertexShader, fragmentShader) {
 	},
 	
 	invertMatrix3: function(m){
-		out = [];
+		let out = [];
 		
 		var a00 = m[0], a01 = m[1], a02 = m[2],
 			a10 = m[3], a11 = m[4], a12 = m[5],

@@ -14,7 +14,7 @@ out vec2 v_uv;
 
 void main() {
 
-    v_normal = mat3(u_normalMatrix) * a_normal;
+    v_normal = (u_normalMatrix * vec4(a_normal, 0.0)).xyz;
 	v_position = (u_viewWorldMatrix * vec4(a_position, 1.0)).xyz;
 	
 	v_uv = vec2(a_uv.x, 1.0 - a_uv.y);

@@ -186,7 +186,7 @@ export class GameplayHandler {
     }
 
     beforeChangeScene(){
-        var playerPosition = this.objects.map((x, i)=>{return {name:x.name, index:i}}).filter((x) => x.name === "ghost")[0].index;
+        let playerPosition = this.objects.map((x, i)=>{return {name:x.name, index:i}}).filter((x) => x.name === "ghost")[0].index;
         this.objects.splice(playerPosition, 1);
     }
 }

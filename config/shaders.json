@@ -23,7 +23,7 @@
              "u_texture", "u_isTexturePresent",
              "u_diffuseColor", "u_specularColor","u_ambientMatColor",
              "u_blinnGamma", "u_alpha",
-             "u_spotColor", "u_spotPosition","u_spotTarget","u_spotDecay", "u_spotConeOut", "u_spotConeIn", "u_spotDir",
+             "u_spotColor", "u_spotPos","u_spotTarget","u_spotDecay", "u_spotConeOut", "u_spotConeIn", "u_spotDir",
              "u_dirLightDirection", "u_dirLightColor", "u_ambientLight"]
     },
     {

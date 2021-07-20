@@ -1,20 +1,22 @@
 {
     "lights" : {
         "ambient" : {
-            "color": [0, 0, 0, 0]
+            "color": [0.1, 0.1, 0.1, 1]
         },
         "directionalLight" : {
             "color" : [0, 0, 0, 0],
-            "direction" : [1, 1, 0]
+            "alpha" : 30,
+            "beta" : 30
         },
         "spotLight" : {
             "color" : [1, 1, 1, 1],
-            "position" : [0, 0.3, 0, 1],
-            "decay": 0.1,
-            "target": 3,
-            "coneI" : 3,
+            "position" : [1, 1, 1, 1],
+            "decay": 0.4,
+            "target": 5,
+            "coneI" : 2,
             "coneO" : 3,
-            "direction" : [0, -1, 0]
+            "alpha" : -45,
+            "beta" : -30
         }
     }
 }

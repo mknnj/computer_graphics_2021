@@ -277,12 +277,23 @@ export class SceneHandler{
     async loadLights(url){
         var lightsDict = (await this.readJson(url));
         this.lights = lightsDict.lights;
+        let alpha = -utils.degToRad(this.lights.directionalLight.alpha);
+        let beta = -utils.degToRad(this.lights.directionalLight.beta);
+        this.lights.directionalLight.direction = [Math.cos(alpha)*Math.cos(beta), 
+                                Math.sin(alpha),
+                                Math.cos(alpha)*Math.sin(beta)];
+
+        alpha = -utils.degToRad(this.lights.spotLight.alpha);
+        beta = -utils.degToRad(this.lights.spotLight.beta);
+        this.lights.spotLight.direction = [Math.cos(alpha)*Math.cos(beta), 
+                                    Math.sin(alpha),
+                                    Math.cos(alpha)*Math.sin(beta)];
         if(this.isGoalPresent){
             var spotLightPosition = this.objects.filter((x) => x.name === "goalBrick")[0].position;
             var finalPos = utils.addVectors(spotLightPosition, [0,1,0]);
-            this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
+            //this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
         }
-        else this.lights.spotLight.color = [0,0,0,0];
+        //else this.lights.spotLight.color = [0,0,0,0];
 
         console.log(this.lights)
     }
@@ -317,6 +328,8 @@ export class SceneHandler{
     mouseMove(e){
         this.camera.ang += RSPE * e.movementX;
         this.camera.elev -= RSPE * e.movementY;
+
+        this.camera.updateViewMat();
     }
 
     activateMovement(e){

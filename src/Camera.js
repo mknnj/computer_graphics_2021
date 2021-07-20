@@ -44,8 +44,15 @@ export class Camera {
     }
 
     getViewMatrix(){
-        this.viewMat = utils.MakeView(this.pos[0], this.pos[1], this.pos[2], this.elev, this.ang);
         return this.viewMat;
+    }
+
+    updateViewMat(){
+        this.viewMat = utils.MakeView(this.pos[0], this.pos[1], this.pos[2], this.elev, this.ang);
+    }
+
+    getViewWithoutPos(){
+        return utils.MakeView(0, 0, 0, this.elev, this.ang);
     }
 
     updatePos(){
@@ -60,6 +67,7 @@ export class Camera {
         this.pos[0] += (Math.sin(utils.degToRad(this.ang)) * front - Math.cos(utils.degToRad(this.ang)) * left) * MSPE;
         this.pos[2] -= (Math.cos(utils.degToRad(this.ang)) * front + Math.sin(utils.degToRad(this.ang)) * left) * MSPE;
         this.pos[1] += high * MSPE;
+        this.updateViewMat();
     }
 
     updateProjection(){
