@@ -50,10 +50,6 @@ export class ThirdPersonCamera {
         return this.viewMat;
     }
 
-    getViewWithoutTranslation(){
-        return utils.invertMatrix(utils.LookAt([0,0,0], this.player.position, [0, 1, 0]));
-    }
-
     mouseMove(e){
         this.ang += RSPE * e.movementX;
         this.elev -= RSPE * e.movementY;

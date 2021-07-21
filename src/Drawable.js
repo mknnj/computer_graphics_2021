@@ -89,6 +89,9 @@ export class Drawable {
 
     draw(camera, lights){
         this.gl.useProgram(this.program);
+
+        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        this.gl.enable(this.gl.BLEND);
         this.gl.bindVertexArray(this.vao);
 
         this.gl.enableVertexAttribArray(this.positionLocation);
@@ -109,9 +112,9 @@ export class Drawable {
         let projectionMatrix = utils.multiplyMatrices(camera.projectionMatrix, viewWorld);
         let normalMatrix = utils.invertMatrix(utils.transposeMatrix(viewWorld));
 
-        this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, true, viewWorld);
-        this.gl.uniformMatrix4fv(this.projectionMatrixLocation, true, projectionMatrix);
-        this.gl.uniformMatrix4fv(this.normalMatrixLocation, true, normalMatrix);
+        this.gl.uniformMatrix4fv(this.viewWorldMatrixLocation, false,utils.transposeMatrix(viewWorld));
+        this.gl.uniformMatrix4fv(this.projectionMatrixLocation, false, utils.transposeMatrix(projectionMatrix));
+        this.gl.uniformMatrix4fv(this.normalMatrixLocation, false, utils.transposeMatrix(normalMatrix));
         
         //texture uniform
         this.gl.uniform1i(this.textureLocation, 0);

@@ -48,23 +48,27 @@ void main() {
     float spotCosOut = cos(radians(u_spotConeOut / 2.0));
 	float spotCosIn = cos(radians(u_spotConeOut * u_spotConeIn / 2.0));
     vec3 spotDir = normalize(u_spotPos - v_position);
-    vec3 nSpotDir = normalize(u_spotDir);
-	float cosSpot = dot(spotDir, nSpotDir);
-	vec4 spotColor = u_spotColor * pow(u_spotTarget / length(u_spotPos - v_position), u_spotDecay) *
+    vec3 nSpotDir = -normalize(u_spotDir);
+	float cosSpot = dot(-spotDir, nSpotDir);
+    vec4 spotColor =vec4(0,0,0,0);
+    if(cosSpot<0.0){
+	    spotColor = u_spotColor * pow(u_spotTarget / length(u_spotPos - v_position), u_spotDecay) *
 						clamp((cosSpot - spotCosOut) / (spotCosIn - spotCosOut), 0.0, 1.0);
+    }
+    
 
     
 
     
     //directional light
-    vec3 normalizedDirLightDirection = normalize(u_dirLightDirection);
+    vec3 normalizedDirLightDirection = -normalize(u_dirLightDirection);
 
-    vec4 spotDiffuseColor = clamp(diffuseColor * spotColor * dot(- nSpotDir, normalizedNormal), 0.0, 1.0);
-    vec4 dirLightDiffuseColor = clamp(diffuseColor * u_dirLightColor * dot(- normalizedDirLightDirection, normalizedNormal), 0.0, 1.0);
+    vec4 spotDiffuseColor = diffuseColor * spotColor * max(0.0,dot(nSpotDir, normalizedNormal));
+    vec4 dirLightDiffuseColor = clamp(diffuseColor * u_dirLightColor * dot(normalizedDirLightDirection, normalizedNormal), 0.0, 1.0);
 
     //specular color 
-    vec3 reflectionSpot = - reflect(spotDir, normalizedNormal);
-    float dotSpotDirNormalVec = max(dot(normalizedNormal, spotDir), 0.0);
+    vec3 reflectionSpot = - reflect(nSpotDir, normalizedNormal);
+    float dotSpotDirNormalVec = max(dot(normalizedNormal, nSpotDir), 0.0);
     float dotReflectionSpotEyeDir = max(dot(reflectionSpot, normalizedEyeDirVec), 0.0);
     vec4 spotSpecularColor = spotColor * u_specularColor * max(sign(dotSpotDirNormalVec),0.0);
     vec4 spotSpecular = pow(dotReflectionSpotEyeDir, u_phongGamma) * spotSpecularColor;
@@ -80,7 +84,7 @@ void main() {
 
     outColor = vec4(clamp(ambientColorResult +
                             spotDiffuseColor +
-                            dirLightDiffuseColor + 
+                            dirLightDiffuseColor +
                             spotSpecular +
                             dirLightSpecular
                             , 0.0, 1.0).xyz, u_alpha);

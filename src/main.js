@@ -39,7 +39,7 @@ async function main() {
     await scene.loadMaterials("/config/materials.json");
     
     await scene.loadTextures("/config/textures.json");
-    await scene.load("/assets/scenes/scene3.json");
+    await scene.loadFromConfig("/config/toLoad.json");
     await scene.loadLights("/config/lights.json");
     await scene.loadSelectableObjectsInfo("/config/selectable.json");
 

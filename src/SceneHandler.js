@@ -23,14 +23,22 @@ export class SceneHandler{
         this.isSpawnPresent = false;
         this.isGoalPresent = false;
         this.showColliders = true;
+        this.bottomLimit = -10;
+    }
+
+    async loadFromConfig(url){
+        var toLoad = (await this.readJson(url)).scene;
+        
+        this.load(toLoad);
     }
 
     async load(url){
         var sceneInfo;
+        try {
         await utils.loadFiles([url], (sceneInfoData) => {
             sceneInfo = JSON.parse(sceneInfoData);
         });
-        try {
+        
             sceneInfo.objects.forEach((x) => {
                 let toAdd = new Drawable(
                     this.shaderHandler.getProgram(x.program),
@@ -61,10 +69,39 @@ export class SceneHandler{
                     if (this.isGoalPresent) throw new Error("CORRUPTED SCENE \nLOADING EMPTY SCENE");
                     else this.isGoalPresent = true;
                 }
+                if(x.name == "plane"){
+                    toAdd.updateAlpha(0.2);
+                    this.bottomLimit = toAdd.position[1];
+                }
+
                 });
         } catch(error){
             alert(error);
-            this.objects = [];
+            let toAdd = new Drawable(
+                this.shaderHandler.getProgram("main"),
+                this.shaderHandler.getJson("main"),
+                this.gl,
+                this.meshDict["plane"],
+                this.materialDict["plane"],
+                "plane",
+                [0, -5, 0],
+                [0, 0, 0],
+                1.0,
+                null
+            );
+            toAdd.collider.renderer = new ColliderRenderer(
+                this.shaderHandler.getProgram("lit"), 
+                this.shaderHandler.getJson("lit"), 
+                this.gl,
+                toAdd.collider
+            );
+            this.objects.push(toAdd);
+            toAdd.meshName = "plane";
+            toAdd.textureName = "plane";
+            toAdd.updateAlpha(0.2);
+            this.bottomLimit = toAdd.position[1];
+            
+            this.objects = [toAdd];
             this.isSpawnPresent = false;
             this.isGoalPresent = false;
         }
@@ -210,7 +247,7 @@ export class SceneHandler{
         if (this.selected != null){
             if (this.selected.name === "spawnBrick" && this.isSpawnPresent) return;
             if (this.selected.name === "goalBrick" && this.isGoalPresent) return;
-            if (this.isPlacing && this.selected.collider.isCollidingWith(this.objects) == null){
+            if (this.isPlacing && this.selected.collider.isCollidingWith(this.objects) == null && this.selected.position[1]>=this.bottomLimit){
                 this.selected.updateAlpha(1);
                 this.selected.collider.renderer = new ColliderRenderer(
                     this.shaderHandler.getProgram("lit"), 
@@ -290,7 +327,9 @@ export class SceneHandler{
             var spotLightPosition = this.objects.filter((x) => x.name === "goalBrick")[0].position;
             var finalPos = utils.addVectors(spotLightPosition, [0,1,0]);
             this.lights.spotLight.position = [finalPos[0], finalPos[1], finalPos[2], 1];
+            console.log(this.lights.spotLight.direction)
         }
+        
         else this.lights.spotLight.color = [0,0,0,0];
     }
 
@@ -331,6 +370,15 @@ export class SceneHandler{
         }   
         if (key == "arrowright"){
             this.lights.directionalLight.alpha += 10;
+            this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
+        }
+
+        if (key == "arrowup"){
+            this.lights.directionalLight.beta -= 10;
+            this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
+        }   
+        if (key == "arrowdown"){
+            this.lights.directionalLight.beta += 10;
             this.lights.directionalLight.direction = this.computeDirection(this.lights.directionalLight.alpha, this.lights.directionalLight.beta);
         }
     }

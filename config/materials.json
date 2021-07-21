@@ -3,72 +3,72 @@
         "diffuse": [0.0, 0.6, 0.0, 1.0],
         "ambient": [0.0, 0.2, 0.0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.1
+        "phongGamma": 100
     },
     "goalBrick" : {
         "diffuse": [0.0, 0.0, 0.6, 1.0],
         "ambient": [0.0, 0.0, 0.2, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 10
+        "phongGamma": 100
     },
     "brick" : {
         "diffuse": [0.6, 0.0, 0.0, 1.0],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.1
+        "phongGamma": 100
     },
     "cloud" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 1
     },
     "cylinder" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "ghost" : {
-        "diffuse": [0.2, 0.2, 0.2, 1],
+        "diffuse": [0.1, 0.1, 0.1, 0.5],
         "ambient": [0.1, 0.1, 0.1, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "hedge" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "mountain" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "rock" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma":100
     },
     "square" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "tree" : {
         "diffuse": [0.6, 0, 0, 1],
         "ambient": [0.2, 0, 0, 1],
         "specular": [0.2, 0.2, 0.2, 1],
-        "phongGamma": 0.8
+        "phongGamma": 100
     },
     "plane" : {
         "diffuse": [0.25, 0.25, 0.25, 1],
         "ambient": [0.0, 0.0, 0.0, 1],
         "specular": [0.1, 0.1, 0.1, 1],
-        "phongGamma": 0.5
+        "phongGamma":100
     }
 }
