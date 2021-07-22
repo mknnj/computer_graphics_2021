@@ -27,21 +27,21 @@ async function main() {
 
     var th = new TextureHandler();
     var sh = new ShadersHandler();
-    await sh.loadProgramsDict("/config/shaders.json", gl);
+    await sh.loadProgramsDict("/computer_graphics_2021/config/shaders.json", gl);
     
     var skyboxProgram = sh.getProgram("skybox");
     skybox = new Skybox(skyboxProgram, sh.getJson("skybox"), gl);
-    await skybox.loadSkyboxInfo("/config/textures.json");
+    await skybox.loadSkyboxInfo("/computer_graphics_2021/config/textures.json");
     skybox.loadSkybox();
 
     scene = new SceneHandler(gl, th, sh);
-    await scene.loadMeshes("/config/mesh.json");
-    await scene.loadMaterials("/config/materials.json");
+    await scene.loadMeshes("/computer_graphics_2021/config/mesh.json");
+    await scene.loadMaterials("/computer_graphics_2021/config/materials.json");
     
-    await scene.loadTextures("/config/textures.json");
-    await scene.loadFromConfig("/config/toLoad.json");
-    await scene.loadLights("/config/lights.json");
-    await scene.loadSelectableObjectsInfo("/config/selectable.json");
+    await scene.loadTextures("/computer_graphics_2021/config/textures.json");
+    await scene.loadFromConfig("/computer_graphics_2021/config/toLoad.json");
+    await scene.loadLights("/computer_graphics_2021/config/lights.json");
+    await scene.loadSelectableObjectsInfo("/computer_graphics_2021/config/selectable.json");
 
     scene.guiElements.push(new GuiElement(sh.getProgram("gui"),
                                             sh.getJson("gui"),

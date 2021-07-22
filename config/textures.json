@@ -1,20 +1,20 @@
 { 
     "skybox":[
         {
-            "right": "assets/skybox/night/right.jpg",
-            "left": "assets/skybox/night/left.jpg",
-            "up": "assets/skybox/night/up.jpg",
-            "down": "assets/skybox/night/down.jpg",
-            "front": "assets/skybox/night/front.jpg",
-            "back": "assets/skybox/night/back.jpg"
+            "right": "/computer_graphics_2021/assets/skybox/night/right.jpg",
+            "left": "/computer_graphics_2021/assets/skybox/night/left.jpg",
+            "up": "/computer_graphics_2021/assets/skybox/night/up.jpg",
+            "down": "/computer_graphics_2021/assets/skybox/night/down.jpg",
+            "front": "/computer_graphics_2021/assets/skybox/night/front.jpg",
+            "back": "/computer_graphics_2021/assets/skybox/night/back.jpg"
         },
         {
-            "right": "assets/skybox/cloudy/right.jpg",
-            "left": "assets/skybox/cloudy/left.jpg",
-            "up": "assets/skybox/cloudy/up.jpg",
-            "down": "assets/skybox/cloudy/down.jpg",
-            "front": "assets/skybox/cloudy/front.jpg",
-            "back": "assets/skybox/cloudy/back.jpg"
+            "right": "/computer_graphics_2021/assets/skybox/cloudy/right.jpg",
+            "left": "/computer_graphics_2021/assets/skybox/cloudy/left.jpg",
+            "up": "/computer_graphics_2021/assets/skybox/cloudy/up.jpg",
+            "down": "/computer_graphics_2021/assets/skybox/cloudy/down.jpg",
+            "front": "/computer_graphics_2021/assets/skybox/cloudy/front.jpg",
+            "back": "/computer_graphics_2021/assets/skybox/cloudy/back.jpg"
         }
 
     ],
@@ -26,13 +26,13 @@
     },
     "textures":
     {
-        "cloud": "/assets/Terrain-Texture_2.png",
-        "cylinder": "/assets/Terrain-Texture_2.png",
-        "hedge": "/assets/Terrain-Texture_2.png",
-        "mountain": "/assets/Terrain-Texture_2.png",
-        "rock": "/assets/Terrain-Texture_2.png",
-        "square": "/assets/Terrain-Texture_2.png",
-        "tree": "/assets/Terrain-Texture_2.png",
-        "scope" : "/assets/scope.png"
+        "cloud": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "cylinder": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "hedge": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "mountain": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "rock": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "square": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "tree": "/computer_graphics_2021/assets/Terrain-Texture_2.png",
+        "scope" : "/computer_graphics_2021/assets/scope.png"
     }
 }

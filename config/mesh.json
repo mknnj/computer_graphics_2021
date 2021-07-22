@@ -1,15 +1,15 @@
 {
     "mesh":
     {
-        "brick": "/assets/brick.obj",
-        "cloud": "/assets/cloud.obj",
-        "cylinder": "/assets/cylinderIsland.obj",
-        "ghost": "/assets/ghost.obj",
-        "hedge": "/assets/hedge.obj",
-        "mountain": "/assets/mountain.obj",
-        "rock": "/assets/rock.obj",
-        "square": "/assets/squareIsland.obj",
-        "tree": "/assets/tree.obj",
-        "plane": "/assets/plane.obj"
+        "brick": "/computer_graphics_2021/assets/brick.obj",
+        "cloud": "/computer_graphics_2021/assets/cloud.obj",
+        "cylinder": "/computer_graphics_2021/assets/cylinderIsland.obj",
+        "ghost": "/computer_graphics_2021/assets/ghost.obj",
+        "hedge": "/computer_graphics_2021/assets/hedge.obj",
+        "mountain": "/computer_graphics_2021/assets/mountain.obj",
+        "rock": "/computer_graphics_2021/assets/rock.obj",
+        "square": "/computer_graphics_2021/assets/squareIsland.obj",
+        "tree": "/computer_graphics_2021/assets/tree.obj",
+        "plane": "/computer_graphics_2021/assets/plane.obj"
     }
 }
